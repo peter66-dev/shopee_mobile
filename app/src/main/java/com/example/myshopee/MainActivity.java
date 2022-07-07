@@ -7,22 +7,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import DAO.UserDAO;
+import DAO.AccountDAO;
 import Model.User;
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnLogin;
-    TextInputEditText username;
-    TextInputEditText password;
+    TextView btnRegister;
+    TextInputEditText txtUsername;
+    TextInputEditText txtPassword;
     CheckBox rememberMe;
-    UserDAO userDao;
+    AccountDAO accountDAO;
     public static User user = null;
 
     @Override
@@ -34,11 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         //Ánh xạ
         btnLogin = findViewById(R.id.btnLogin);
-        username = findViewById(R.id.username);
-        password = findViewById(R.id.password);
+        btnRegister=findViewById(R.id.btnRegister);
+        txtUsername = findViewById(R.id.username);
+        txtPassword = findViewById(R.id.password);
         rememberMe = findViewById(R.id.rememberMe);
 
-        userDao = new UserDAO(MainActivity.this);
+        accountDAO = new AccountDAO(MainActivity.this);
         loadData();
 
 
@@ -47,22 +50,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 try {
-                    String userString = username.getText().toString();
-                    String pwd = password.getText().toString();
+                    String username = txtUsername.getText().toString();
+                    String password = txtPassword.getText().toString();
                     boolean check = rememberMe.isChecked();
-                    user = new User(userString, pwd);
-                    if (userDao.checkLogin(user)) {
-                        saveUser(userString, pwd, check);
-                        Toast.makeText(MainActivity.this, "Login success!", Toast.LENGTH_LONG).show();
+                    int role = accountDAO.checkLogin(username, password);
+                    if (role == 1) { // bug here
+                        saveUser(username, password, check);
                         Intent intent = new Intent(MainActivity.this, Home.class);
-                        intent.putExtra("welcomeMessage", "Xin chào, " + userString + "!");
+                        intent.putExtra("welcomeMessage", "Xin chào, " + username + "!");
                         startActivity(intent);
+                    } else if (role == 2) {
+                        Toast.makeText(MainActivity.this, "OK! ADMIN!!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(MainActivity.this, "Login fail!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Login fail!", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
-                    Log.e("TAG", "Error detail: "+ ex.getMessage());
+                    Log.e("TAG", "Error at MainActivity! Detail: " + ex.getMessage());
                 }
+            }
+        });
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Register.class);
+                startActivity(intent);
             }
         });
     }
@@ -71,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("information.dat", MODE_PRIVATE);
         boolean check = pref.getBoolean("check", false);
         if (check) {
-            username.setText(pref.getString("username", ""));
-            password.setText(pref.getString("password", ""));
+            txtUsername.setText(pref.getString("username", ""));
+            txtPassword.setText(pref.getString("password", ""));
             rememberMe.setChecked(check);
         }
     }

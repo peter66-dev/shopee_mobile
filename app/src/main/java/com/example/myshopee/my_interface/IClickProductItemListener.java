@@ -1,6 +1,6 @@
 package com.example.myshopee.my_interface;
 
-import com.example.myshopee.Product;
+import Model.Product;
 
 public interface IClickProductItemListener {
     void onClickProductItem(Product pro);

@@ -10,21 +10,23 @@ import java.util.ArrayList;
 import Database.MyDatabase;
 import Model.User;
 
-public class UserDAO {
+public class AccountDAO {
     MyDatabase mydata;
 
-    public UserDAO(Context context) {
+    public AccountDAO(Context context) {
         this.mydata = new MyDatabase(context);
     }
 
-    public boolean checkLogin(User user) {
+    public int checkLogin(String username, String password) {
+        int role = 0;
         SQLiteDatabase db = mydata.getReadableDatabase();
         //bug here
-        Cursor cs = db.rawQuery("select * from USER where username =? and password=?", new String[]{user.getUserName(), user.getPassword()});
-        if (cs.getCount() <= 0) {
-            return false;
+        Cursor cs = db.rawQuery("select * from ACCOUNTS where Username =? and Password=?", new String[]{username, password});
+        if (cs.getCount() > 0) {
+            cs.moveToFirst();
+            role = cs.getInt(3);
         }
-        return true;
+        return role;
     }
 
     // Update password
@@ -32,7 +34,7 @@ public class UserDAO {
         SQLiteDatabase db = mydata.getReadableDatabase();
         ContentValues values = new ContentValues();
         values.put("password", user.getPassword());
-        int row = db.update("USER", values, "username=?", new String[]{user.getUserName()});
+        int row = db.update("ACCOUNTS", values, "username=?", new String[]{user.getUserName()});
         return row > 0;
     }
 
@@ -40,12 +42,14 @@ public class UserDAO {
     public ArrayList<User> getAllUser() {
         ArrayList<User> list = new ArrayList<>();
         SQLiteDatabase db = mydata.getReadableDatabase();
-        Cursor cs = db.rawQuery("select * from USER", null);
+        Cursor cs = db.rawQuery("select * from ACCOUNTS", null);
         cs.moveToFirst();
         while (!cs.isAfterLast()) {
-            String username = cs.getString(0);
-            String password = cs.getString(1);
-            list.add(new User(username, password));
+            int userId = cs.getInt(0);
+            String username = cs.getString(1);
+            String password = cs.getString(2);
+            int role = cs.getInt(3);
+            list.add(new User(userId, username, password, role));
             cs.moveToNext();
         }
         cs.close();
@@ -53,19 +57,20 @@ public class UserDAO {
     }
 
     // add a new user
-    public boolean create(User user) {
+    public boolean create(String username, String password, int roleId) {
         SQLiteDatabase db = mydata.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("Username", user.getUserName());
-        contentValues.put("Password", user.getPassword());
-        long row = db.insert("USER", null, contentValues);
+        contentValues.put("Username", username);
+        contentValues.put("Password", password);
+        contentValues.put("RoleId", roleId);
+        long row = db.insert("ACCOUNTS", null, contentValues);
         return row > 0;
     }
 
     // delete a user
     public boolean delete(String username) {
         SQLiteDatabase db = mydata.getReadableDatabase();
-        int row = db.delete("USER", "username=?", new String[]{username});
+        int row = db.delete("ACCOUNTS", "username=?", new String[]{username});
         return row > 0;
     }
 }

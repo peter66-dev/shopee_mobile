@@ -12,12 +12,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import Model.Product;
 
 public class ProductDetail extends AppCompatActivity {
 
@@ -26,21 +29,26 @@ public class ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        ImageView detailImg = findViewById(R.id.proImg);
+        ImageView productImg = findViewById(R.id.productImg);
         TextView productName = findViewById(R.id.productName);
+        TextView productDescription = findViewById(R.id.productDescription);
         TextView productPrice = findViewById(R.id.productPrice);
+        TextView productSold = findViewById(R.id.productSold);
+        TextView quantityInStock = findViewById(R.id.quantityInStock);
         FloatingActionButton btnCall = findViewById(R.id.phoneIcon);
         Button btnCare = findViewById(R.id.btnCare);
 
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Product curPro = (Product) bundle.get("obj_product");
-//            Toast.makeText(this, curPro.getName(), Toast.LENGTH_SHORT).show();
-            // Chưa làm layout của product_detail
-            productName.setText(curPro.getName());
-            productPrice.setText(curPro.getPrice() + "");
-            detailImg.setImageResource(curPro.getImgSrc());
+            Product clickedProduct = (Product) bundle.get("obj_product");
+
+            productName.setText("Tên sản phẩm: " + clickedProduct.getProductName());
+            productPrice.setText("Giá bán: " + clickedProduct.getPrice() + "đ");
+            quantityInStock.setText("Số lượng trong kho: " + clickedProduct.getQuantity());
+            productDescription.setText(clickedProduct.getDescription());
+            productSold.setText("Đã bán: "+clickedProduct.getSoldQuantity());
+            productImg.setImageResource(getImageId(this.getApplicationContext(), clickedProduct.getImage()));
         }
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -65,7 +73,7 @@ public class ProductDetail extends AppCompatActivity {
                         .build();
 
                 NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     NotificationChannel mychannel = new NotificationChannel(CHANNEL_ID, name, important);
                     manager.createNotificationChannel(mychannel);
                 }
@@ -81,7 +89,12 @@ public class ProductDetail extends AppCompatActivity {
                 intent.setData(Uri.parse("tel:" + phoneNumber));
                 startActivity(intent);
             }
-        });
+        });btnCare
+    }
 
+    public static int getImageId(Context context, String imageName) {
+        Log.i("[PETER MESSAGE]", "Image source:  " + imageName);
+        Log.i("[PETER MESSAGE]", "Image index:  " + context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName()));
+        return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
 }
