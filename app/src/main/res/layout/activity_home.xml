@@ -15,17 +15,9 @@
         android:textColor="#DA4E4E"
         android:text="Xin chào bạn!"/>
 
-    <TextView
-        android:id="@+id/showAll"
-        android:layout_below="@+id/welcomeUser"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#023DED"
-        android:text="Tất cả sản phẩm hiện có!"/>
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_page_2"
-        android:layout_below="@id/showAll"
+        android:layout_below="@id/welcomeUser"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bottom_navigation"/>

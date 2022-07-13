@@ -86,16 +86,6 @@
         android:background="#ED2D5B"
         android:text="Quan tâm" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/phoneIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:src="@drawable/ic_phone_24" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="65dp"
@@ -103,7 +93,7 @@
         >
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddtoCart"
+            android:id="@+id/btnSeeCart"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="-6dp"
@@ -119,7 +109,7 @@
             android:layout_marginBottom="-6dp"
             android:layout_weight="1"
             android:backgroundTint="@color/red"
-            android:text="Mua Ngay"
+            android:text="Mua ngay"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"

@@ -4,15 +4,17 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/drawable/ic_info.xml" value="0.169" />
+        <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_cart.xml" value="0.36666666666666664" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_home.xml" value="0.25" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_list_product.xml" value="0.1" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_main.xml" value="0.33" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_product_detail.xml" value="0.33" />
-        <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_register.xml" value="0.36666666666666664" />
+        <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/fragment_favorite.xml" value="0.36666666666666664" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/fragment_history.xml" value="0.36666666666666664" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/fragment_home.xml" value="0.33" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/fragment_me.xml" value="0.3074074074074074" />
+        <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/item_cart.xml" value="0.36666666666666664" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/item_product.xml" value="0.5" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/layout/mylayout.xml" value="0.33" />
         <entry key="..\:/Chuyen_nganh_7/PRM392/Code/MyShopee/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />

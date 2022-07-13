@@ -1,5 +1,6 @@
 package com.example.myshopee;
 
+import android.accounts.Account;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         //Ánh xạ
         btnLogin = findViewById(R.id.btnLogin);
-        btnRegister=findViewById(R.id.btnRegister);
+        btnRegister = findViewById(R.id.btnRegister);
         txtUsername = findViewById(R.id.username);
         txtPassword = findViewById(R.id.password);
         rememberMe = findViewById(R.id.rememberMe);
@@ -53,16 +54,18 @@ public class MainActivity extends AppCompatActivity {
                     String username = txtUsername.getText().toString();
                     String password = txtPassword.getText().toString();
                     boolean check = rememberMe.isChecked();
-                    int role = accountDAO.checkLogin(username, password);
-                    if (role == 1) { // bug here
-                        saveUser(username, password, check);
-                        Intent intent = new Intent(MainActivity.this, Home.class);
-                        intent.putExtra("welcomeMessage", "Xin chào, " + username + "!");
-                        startActivity(intent);
-                    } else if (role == 2) {
-                        Toast.makeText(MainActivity.this, "OK! ADMIN!!", Toast.LENGTH_SHORT).show();
+                    User user = accountDAO.checkLogin(username, password);
+                    if (user != null) {
+                        if (user.getRoleId() == 1) { // bug here
+                            saveUser(username, password, check);
+                            Intent intent = new Intent(MainActivity.this, Home.class);
+                            intent.putExtra("welcomeMessage", "Xin chào, " + username + "!");
+                            startActivity(intent);
+                        } else if (user.getRoleId() == 2) {
+                            Toast.makeText(MainActivity.this, "OK! ADMIN!!", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        Toast.makeText(MainActivity.this, "Login fail!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Login failed!", Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
                     Log.e("TAG", "Error at MainActivity! Detail: " + ex.getMessage());
@@ -112,13 +115,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(MainActivity.this, "I am onDestroy", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "I am onDestroy", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(MainActivity.this, "I am onPause", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "I am onPause", Toast.LENGTH_SHORT).show();
     }
 
     @Override

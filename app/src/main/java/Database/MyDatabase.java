@@ -9,14 +9,14 @@ import androidx.annotation.Nullable;
 public class MyDatabase extends SQLiteOpenHelper {
 
     public MyDatabase(@Nullable Context context) { // tạo db
-        super(context, "shopeeDB4", null, 2);
+        super(context, "shopeeDB6", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
         String tblRoles = "CREATE TABLE \"ROLES\" ( \"RoleId\"\tINTEGER NOT NULL, \"RoleName\"\tTEXT NOT NULL UNIQUE, PRIMARY KEY(\"RoleId\") )";
-        String tblAccounts = "CREATE TABLE \"ACCOUNTS\" ( \"UserId\"\tINTEGER NOT NULL, \"Username\"\tTEXT NOT NULL, \"Password\"\tTEXT NOT NULL, \"RoleId\"\tINTEGER NOT NULL DEFAULT 1, FOREIGN KEY(\"RoleId\") REFERENCES \"ROLES\"(\"RoleId\"), PRIMARY KEY(\"UserId\") )";
+        String tblAccounts = "CREATE TABLE \"ACCOUNTS\" (\"UserId\"\tINTEGER NOT NULL,\"Username\"\tTEXT NOT NULL,\"Password\"\tTEXT NOT NULL,\"RoleId\"\tINTEGER NOT NULL DEFAULT 1,\"Budget\"\tREAL NOT NULL DEFAULT 0 CHECK('Budget' > 0),\"Address\"\tTEXT DEFAULT 'N''thành phố Hồ Chí Minh''''',\"Phone\"\tTEXT,PRIMARY KEY(\"UserId\"),FOREIGN KEY(\"RoleId\") REFERENCES \"ROLES\"(\"RoleId\"));";
         String tblProducts = "CREATE TABLE \"PRODUCTS\" (\"ProductId\"\tINTEGER NOT NULL, \"ProductName\"\tTEXT NOT NULL, \"Price\"\tNUMERIC NOT NULL DEFAULT 10000 CHECK(\"Price\" > 1000), \"Quantity\"\tINTEGER NOT NULL DEFAULT 0 CHECK(\"Quantity\" > 0), \"SoldQuantity\"\tINTEGER NOT NULL DEFAULT 0 CHECK(\"SoldQuantity\" > 0), \"Description\"\tTEXT, \"Image\"\tTEXT, PRIMARY KEY(\"ProductId\"))";
 
         db.execSQL(tblRoles);
@@ -26,8 +26,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO ROLES VALUES(1, 'USER')");
         db.execSQL("INSERT INTO ROLES VALUES(2, 'ADMIN')");
 
-        db.execSQL("INSERT INTO ACCOUNTS(UserId, Username, Password, RoleId) VALUES(1, 'user', 'user', 1)");
-        db.execSQL("INSERT INTO ACCOUNTS(UserId, Username, Password, RoleId) VALUES(2, 'admin', 'admin', 2)");
+        db.execSQL("INSERT INTO ACCOUNTS(UserId, Username, Password, Budget, Address , Phone, RoleId) VALUES(1, 'phuong', '123', 5000000, 'TPHCM', '0971273712', 1)");
+        db.execSQL("INSERT INTO ACCOUNTS(UserId, Username, Password, Budget, Address , Phone, RoleId) VALUES(2, 'admin', '123', 5000000, 'Ha Noi', '0931821317',2)");
 
         db.execSQL("INSERT INTO PRODUCTS(ProductName, Price, Quantity, SoldQuantity, Description, Image) VALUES('Áo thun', 320000, 1200 , 4520,'Áo này rất phù hợp với style!','product1')");
         db.execSQL("INSERT INTO PRODUCTS(ProductName, Price, Quantity, SoldQuantity, Description, Image) VALUES('Áo thun', 120000, 1200 , 130,'Áo này rất phù hợp với style!','product2')");

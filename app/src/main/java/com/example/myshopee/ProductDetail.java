@@ -35,8 +35,9 @@ public class ProductDetail extends AppCompatActivity {
         TextView productPrice = findViewById(R.id.productPrice);
         TextView productSold = findViewById(R.id.productSold);
         TextView quantityInStock = findViewById(R.id.quantityInStock);
-        FloatingActionButton btnCall = findViewById(R.id.phoneIcon);
         Button btnCare = findViewById(R.id.btnCare);
+        Button btnSeeCart = findViewById(R.id.btnSeeCart);
+        Button btnBuy = findViewById(R.id.btnBuy);
 
 
         Bundle bundle = getIntent().getExtras();
@@ -81,15 +82,33 @@ public class ProductDetail extends AppCompatActivity {
             }
         });
 
-        btnCall.setOnClickListener(new View.OnClickListener() {
+        btnSeeCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String phoneNumber = "0971775169";
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + phoneNumber));
-                startActivity(intent);
+                String CHANNEL_ID = "channel_id";
+                CharSequence name = "channel_name";
+
+                Context context = getApplicationContext();
+                int important = NotificationManager.IMPORTANCE_HIGH;
+                PendingIntent pe = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                Notification builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Shopee message")
+                        .setContentText("Bạn đã thêm sản phẩm này vào giỏ hàng!")
+                        .setChannelId(CHANNEL_ID)
+                        .setContentIntent(pe)
+                        .setAutoCancel(true)
+                        .build();
+
+                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel mychannel = new NotificationChannel(CHANNEL_ID, name, important);
+                    manager.createNotificationChannel(mychannel);
+                }
+                manager.notify(0, builder);
             }
-        });btnCare
+        });
     }
 
     public static int getImageId(Context context, String imageName) {
