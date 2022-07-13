@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.myshopee.R;
 
-public class HistoryFragment extends Fragment {
+public class CartFragment extends Fragment {
 
     private View view;
 

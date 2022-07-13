@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.example.myshopee.fragment.InfomationFragment;
-import com.example.myshopee.fragment.HistoryFragment;
+import com.example.myshopee.fragment.CartFragment;
 import com.example.myshopee.fragment.HomeFragment;
 
 public class MyViewPagerAdapter extends FragmentStateAdapter {
@@ -21,7 +21,7 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
         switch (position) {
             case 1: {
-                return new HistoryFragment();
+                return new CartFragment();
             }
             case 2: {
                 return new InfomationFragment();

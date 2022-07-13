@@ -14,15 +14,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.myshopee.MyUtils.AnimationUtil;
+import com.example.myshopee.my_interface.IClickAđToCartListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import Model.Product;
+import Model.User;
 
 public class ProductDetail extends AppCompatActivity {
+    IClickAđToCartListener iClickAđToCartListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +38,15 @@ public class ProductDetail extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         ImageView productImg = findViewById(R.id.productImg);
+        ImageView view_animation = findViewById(R.id.view_animation);
+        ImageView view_end_animation = findViewById(R.id.view_end_animation);
         TextView productName = findViewById(R.id.productName);
         TextView productDescription = findViewById(R.id.productDescription);
         TextView productPrice = findViewById(R.id.productPrice);
         TextView productSold = findViewById(R.id.productSold);
         TextView quantityInStock = findViewById(R.id.quantityInStock);
         Button btnCare = findViewById(R.id.btnCare);
-        Button btnSeeCart = findViewById(R.id.btnSeeCart);
+        Button btnAddToCart = findViewById(R.id.btnAddToCart);
         Button btnBuy = findViewById(R.id.btnBuy);
 
 
@@ -48,7 +58,7 @@ public class ProductDetail extends AppCompatActivity {
             productPrice.setText("Giá bán: " + clickedProduct.getPrice() + "đ");
             quantityInStock.setText("Số lượng trong kho: " + clickedProduct.getQuantity());
             productDescription.setText(clickedProduct.getDescription());
-            productSold.setText("Đã bán: "+clickedProduct.getSoldQuantity());
+            productSold.setText("Đã bán: " + clickedProduct.getSoldQuantity());
             productImg.setImageResource(getImageId(this.getApplicationContext(), clickedProduct.getImage()));
         }
 
@@ -82,11 +92,37 @@ public class ProductDetail extends AppCompatActivity {
             }
         });
 
-        btnSeeCart.setOnClickListener(new View.OnClickListener() {
+        btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String CHANNEL_ID = "channel_id";
                 CharSequence name = "channel_name";
+
+                Bundle bundle = getIntent().getExtras();
+                if (bundle != null) {
+                    Product pro = (Product) bundle.get("obj_product");
+                    User current_user = (User) bundle.get("current_user");
+//                    Toast.makeText(ProductDetail.this, current_user.getUserName() + " đã mua " + pro.getProductName(), Toast.LENGTH_SHORT).show();
+//                    iClickAđToCartListener.onClickAddToCart(current_user, pro);
+                    view_animation.setImageResource(R.drawable.product1);
+                    AnimationUtil.translateAnimation(view_animation, view_animation, view_end_animation, new Animation.AnimationListener() {
+                        @Override
+                        public void onAnimationStart(Animation animation) {
+
+                        }
+
+                        @Override
+                        public void onAnimationEnd(Animation animation) {
+                            btnAddToCart.setBackgroundResource(R.color.gray);
+                            btnAddToCart.setEnabled(false);
+                        }
+
+                        @Override
+                        public void onAnimationRepeat(Animation animation) {
+
+                        }
+                    });
+                }
 
                 Context context = getApplicationContext();
                 int important = NotificationManager.IMPORTANCE_HIGH;

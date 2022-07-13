@@ -66,7 +66,7 @@ public class AccountDAO {
 
     // add a new user
     public boolean create(String username, String password, String phone, String address) {
-        SQLiteDatabase db = mydata.getReadableDatabase();
+        SQLiteDatabase db = mydata.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("Username", username);
         contentValues.put("Password", password);
@@ -80,7 +80,7 @@ public class AccountDAO {
 
     // delete a user
     public boolean delete(String username) {
-        SQLiteDatabase db = mydata.getReadableDatabase();
+        SQLiteDatabase db = mydata.getWritableDatabase();
         int row = db.delete("ACCOUNTS", "username=?", new String[]{username});
         return row > 0;
     }

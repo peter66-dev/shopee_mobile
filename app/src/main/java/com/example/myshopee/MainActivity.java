@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
                             saveUser(username, password, check);
                             Intent intent = new Intent(MainActivity.this, Home.class);
                             intent.putExtra("welcomeMessage", "Xin chào, " + username + "!");
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("current_user", user);
+                            intent.putExtras(bundle);
                             startActivity(intent);
                         } else if (user.getRoleId() == 2) {
                             Toast.makeText(MainActivity.this, "OK! ADMIN!!", Toast.LENGTH_SHORT).show();

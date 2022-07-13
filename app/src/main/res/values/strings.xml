@@ -2,6 +2,6 @@
     <string name="app_name">MyShopee</string>
     <string name="bottom_home">Home</string>
     <string name="bottom_favorite">Favorite</string>
-    <string name="bottom_history">History</string>
+    <string name="bottom_cart">Cart</string>
     <string name="bottom_me">Me</string>
 </resources>

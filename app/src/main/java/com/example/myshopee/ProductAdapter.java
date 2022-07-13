@@ -10,11 +10,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.myshopee.my_interface.IClickAđToCartListener;
 import com.example.myshopee.my_interface.IClickProductItemListener;
 import java.util.List;
 import Model.Product;
 
-public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHolder> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     Context context;
     List<Product> data;
@@ -32,7 +34,7 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
     }
 
 
-    public AdapterProduct(Context context, IClickProductItemListener listener) {
+    public ProductAdapter(Context context, IClickProductItemListener listener) {
         this.context = context;
         this.iClickProductItemListener = listener;
     }
@@ -69,25 +71,19 @@ public class AdapterProduct extends RecyclerView.Adapter<AdapterProduct.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        //        TextView productID;
         TextView productName;
         TextView productPrice;
         TextView productSold;
-        //        TextView detailDescription;
-//        TextView quantityInStock;
         ImageView productImg;
         CardView layoutItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-//            productID = itemView.findViewById(R.id.productID);
             layoutItem = itemView.findViewById(R.id.layout_item);
             productName = itemView.findViewById(R.id.productContent);
             productImg = itemView.findViewById(R.id.productImg);
             productPrice = itemView.findViewById(R.id.productPrice);
             productSold = itemView.findViewById(R.id.productSold);
-//            detailDescription = itemView.findViewById(R.id.detailDescription);
-//            quantityInStock = itemView.findViewById(R.id.quantityInStock);
         }
     }
 }

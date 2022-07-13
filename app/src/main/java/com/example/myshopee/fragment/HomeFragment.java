@@ -2,6 +2,7 @@ package com.example.myshopee.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myshopee.AdapterProduct;
+import com.example.myshopee.ProductAdapter;
 import com.example.myshopee.Home;
 import com.example.myshopee.ProductDetail;
 import com.example.myshopee.R;
@@ -22,12 +23,13 @@ import java.util.ArrayList;
 
 import DAO.ProductDAO;
 import Model.Product;
+import Model.User;
 
 public class HomeFragment extends Fragment {
 
     private View view;
     private RecyclerView recyclerView;
-    private AdapterProduct adapterProduct;
+    private ProductAdapter adapterProduct;
     private ProductDAO productDAO = new ProductDAO(this.getContext());
     private Home homeActivity;
 
@@ -42,7 +44,7 @@ public class HomeFragment extends Fragment {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(homeActivity, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
 
-        adapterProduct = new AdapterProduct(homeActivity, new IClickProductItemListener(){
+        adapterProduct = new ProductAdapter(homeActivity, new IClickProductItemListener(){
             @Override
             public void onClickProductItem(Product pro) {
                 showProductDetail(pro);
@@ -63,7 +65,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         productDAO = new ProductDAO(this.getContext());
         ArrayList<Product> list = productDAO.loadAllProducts();
-        adapterProduct = new AdapterProduct(this.getContext(), new IClickProductItemListener() {
+        adapterProduct = new ProductAdapter(this.getContext(), new IClickProductItemListener() {
             @Override
             public void onClickProductItem(Product pro) {
                 showProductDetail(pro);
@@ -82,7 +84,11 @@ public class HomeFragment extends Fragment {
     private void showProductDetail(Product pro) {
         Intent intent = new Intent(getActivity(), ProductDetail.class);
         Bundle bundle = new Bundle();
+        User user = (User)bundle.get("current_user");
         bundle.putSerializable("obj_product", pro);
+        bundle.putSerializable("current_user", user);
+//        Log.i("[PETER_MESSAGE]", "User name: " + user.getUserName());
+//        Log.i("[PETER_MESSAGE]", "Product name: " + pro.getProductName());
         intent.putExtras(bundle);
         startActivity(intent);
     }

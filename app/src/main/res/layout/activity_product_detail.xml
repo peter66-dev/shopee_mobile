@@ -7,6 +7,14 @@
     tools:context=".ProductDetail">
 
     <ImageView
+        android:id="@+id/view_animation"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:visibility="invisible" />
+
+    <ImageView
         android:id="@+id/productImg"
         android:layout_width="match_parent"
         android:layout_height="260dp" />
@@ -92,8 +100,16 @@
         android:layout_alignParentBottom="true"
         >
 
+        <ImageView
+            android:id="@+id/view_end_animation"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            />
+
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSeeCart"
+            android:id="@+id/btnAddToCart"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="-6dp"
@@ -115,7 +131,6 @@
             android:textStyle="bold"
             app:cornerRadius="0dp"
             app:strokeWidth="0dp" />
-
     </LinearLayout>
 
 </RelativeLayout>

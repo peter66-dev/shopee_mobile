@@ -1,5 +1,6 @@
 package DAO;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -34,6 +35,15 @@ public class ProductDAO {
         }
         cs.close();
         return list;
+    }
+
+    public boolean updateProduct(int id, int quantity) {
+        boolean check = false;
+        ContentValues cv = new ContentValues();
+        cv.put("Quantity", quantity);
+        SQLiteDatabase dao = db.getWritableDatabase();
+        check = dao.update("PRODUCTS", cv, "ProductId = ?", new String[]{id + ""}) > 0;
+        return check;
     }
 
 

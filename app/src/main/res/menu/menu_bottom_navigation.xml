@@ -5,9 +5,9 @@
     <item android:id="@+id/bottom_home"
         android:title="@string/bottom_home"
         android:icon="@drawable/ic_home"/>
-    <item android:id="@+id/bottom_history"
-        android:title="@string/bottom_history"
-        android:icon="@drawable/ic_history"/>
+    <item android:id="@+id/bottom_cart"
+        android:title="@string/bottom_cart"
+        android:icon="@drawable/cart"/>
     <item android:id="@+id/bottom_me"
         android:title="@string/bottom_me"
         android:icon="@drawable/ic_info"/>

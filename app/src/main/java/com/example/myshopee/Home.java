@@ -47,7 +47,7 @@ public class Home extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.bottom_home) {
                     viewPager2.setCurrentItem(0);
-                } else if (id == R.id.bottom_history) {
+                } else if (id == R.id.bottom_cart) {
                     viewPager2.setCurrentItem(1);
                 } else if (id == R.id.bottom_me) {
                     viewPager2.setCurrentItem(2);
@@ -62,7 +62,7 @@ public class Home extends AppCompatActivity {
                 super.onPageSelected(position);
                 switch (position) {
                     case 1: {
-                        bottomNavigationView.getMenu().findItem(R.id.bottom_history).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.bottom_cart).setChecked(true);
                         break;
                     }
                     case 2: {
