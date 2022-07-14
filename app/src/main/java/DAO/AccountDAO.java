@@ -20,7 +20,6 @@ public class AccountDAO {
     public User checkLogin(String username, String password) {
         User acc = null;
         SQLiteDatabase db = mydata.getReadableDatabase();
-        //bug here
         Cursor cs = db.rawQuery("select * from ACCOUNTS where Username =? and Password=?", new String[]{username, password});
         if (cs.getCount() > 0) {
             cs.moveToFirst();
