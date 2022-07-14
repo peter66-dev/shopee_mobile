@@ -8,7 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="yellow">#FFEB3B</color>
-    <color name="red">#E60D0D</color>
+<!--    <color name="red">#E60D0D</color>-->
     <color name="blue">#4BCFC0</color>
     <color name="gray">#464948</color>
+
+    <color name="red">#F80114</color>
+    <color name="light_color">#BCBCBA</color>
+    <color name="ubuntu_orange">#ED4D2D</color>
+    <color name="transparent">@android:color/transparent</color>
 </resources>

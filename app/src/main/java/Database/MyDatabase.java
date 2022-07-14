@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class MyDatabase extends SQLiteOpenHelper {
 
     public MyDatabase(@Nullable Context context) { // tạo db
-        super(context, "shopeeDB6", null, 1);
+        super(context, "shopeeDB7", null, 1);
     }
 
     @Override
@@ -18,10 +18,14 @@ public class MyDatabase extends SQLiteOpenHelper {
         String tblRoles = "CREATE TABLE \"ROLES\" ( \"RoleId\"\tINTEGER NOT NULL, \"RoleName\"\tTEXT NOT NULL UNIQUE, PRIMARY KEY(\"RoleId\") )";
         String tblAccounts = "CREATE TABLE \"ACCOUNTS\" (\"UserId\"\tINTEGER NOT NULL,\"Username\"\tTEXT NOT NULL,\"Password\"\tTEXT NOT NULL,\"RoleId\"\tINTEGER NOT NULL DEFAULT 1,\"Budget\"\tREAL NOT NULL DEFAULT 0 CHECK('Budget' > 0),\"Address\"\tTEXT DEFAULT 'N''thành phố Hồ Chí Minh''''',\"Phone\"\tTEXT,PRIMARY KEY(\"UserId\"),FOREIGN KEY(\"RoleId\") REFERENCES \"ROLES\"(\"RoleId\"));";
         String tblProducts = "CREATE TABLE \"PRODUCTS\" (\"ProductId\"\tINTEGER NOT NULL, \"ProductName\"\tTEXT NOT NULL, \"Price\"\tNUMERIC NOT NULL DEFAULT 10000 CHECK(\"Price\" > 1000), \"Quantity\"\tINTEGER NOT NULL DEFAULT 0 CHECK(\"Quantity\" > 0), \"SoldQuantity\"\tINTEGER NOT NULL DEFAULT 0 CHECK(\"SoldQuantity\" > 0), \"Description\"\tTEXT, \"Image\"\tTEXT, PRIMARY KEY(\"ProductId\"))";
+        String tblCarts = "CREATE TABLE \"CARTS\" (\"CartId\"\tINTEGER NOT NULL,\"UserId\"\tINTEGER NOT NULL,\"IsPaid\"\tINTEGER NOT NULL DEFAULT 0 CHECK('IsPaid' >= 0),PRIMARY KEY(\"CartId\"));";
+        String tblCartDetails = "CREATE TABLE \"CARTDETAILS\" (\"Id\"\tINTEGER NOT NULL,\"CartId\"\tINTEGER NOT NULL,\"ProductId\"\tINTEGER NOT NULL,\"Quantity\"\tINTEGER NOT NULL DEFAULT 1 CHECK('Quantity' > 0),PRIMARY KEY(\"Id\"),FOREIGN KEY(\"CartId\") REFERENCES \"ACCOUNTS\"(\"UserId\"),FOREIGN KEY(\"ProductId\") REFERENCES \"PRODUCTS\"(\"ProductId\"));";
 
         db.execSQL(tblRoles);
         db.execSQL(tblAccounts);
         db.execSQL(tblProducts);
+        db.execSQL(tblCarts);
+        db.execSQL(tblCartDetails);
 
         db.execSQL("INSERT INTO ROLES VALUES(1, 'USER')");
         db.execSQL("INSERT INTO ROLES VALUES(2, 'ADMIN')");
@@ -55,6 +59,14 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO PRODUCTS(ProductName, Price, Quantity, SoldQuantity, Description, Image) VALUES('Áo thun', 110000, 10 , 110,'Áo này rất phù hợp với style!','p24')");
         db.execSQL("INSERT INTO PRODUCTS(ProductName, Price, Quantity, SoldQuantity, Description, Image) VALUES('Áo thun', 880000, 100 , 120,'Áo này rất phù hợp với style!','p25')");
         db.execSQL("INSERT INTO PRODUCTS(ProductName, Price, Quantity, SoldQuantity, Description, Image) VALUES('Áo thun', 880000, 100 , 190,'Áo này rất phù hợp với style!','p26')");
+
+        db.execSQL("INSERT INTO CARTS VALUES(1, 1, 0)");
+        db.execSQL("INSERT INTO CARTS VALUES(2, 1, 1)");
+
+        db.execSQL("INSERT INTO CARTDETAILS VALUES(1, 1, 1, 3)");
+        db.execSQL("INSERT INTO CARTDETAILS VALUES(2, 2, 5, 2)");
+
+
     }
 
     @Override
@@ -62,6 +74,8 @@ public class MyDatabase extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS ACCOUNTS");
         db.execSQL("DROP TABLE IF EXISTS ROLES");
         db.execSQL("DROP TABLE IF EXISTS PRODUCTS");
+        db.execSQL("DROP TABLE IF EXISTS CARTS");
+        db.execSQL("DROP TABLE IF EXISTS CARTDETAILS");
         onCreate(db);
     }
 }
