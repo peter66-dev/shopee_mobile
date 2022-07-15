@@ -3,6 +3,7 @@ package com.example.myshopee;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 
+import android.animation.Animator;
 import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,7 +13,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,54 +21,115 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.myshopee.MyUtils.AnimationUtil;
+import com.example.myshopee.MyUtils.CircleAnimationUtil;
+import com.example.myshopee.MyUtils.CommonUtils;
 import com.example.myshopee.my_interface.IClickAđToCartListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.text.DecimalFormat;
+import java.util.HashMap;
+import java.util.List;
+
+import DAO.CartDAO;
+import DAO.CartDetailDAO;
+import Model.Cart;
+import Model.CartDetails;
 import Model.Product;
 import Model.User;
 
 public class ProductDetail extends AppCompatActivity {
     IClickAđToCartListener iClickAđToCartListener;
+    private CartDAO cartDAO;
+    private CartDetailDAO cartDetailDAO;
+    private Product currentProduct;
+    private List<Cart> unpaidCartsExisting;
+    private User currentUser;
+    private int totalNumberOfQuantityInCart = 0;
+    private HashMap<Integer, CartDetails> getAllCartDetailsUnpaid;
+
+    private ImageView productImg;
+    private ImageView productImgClone;
+    private TextView productName;
+    private TextView productDescription;
+    private TextView productPrice;
+    private TextView productSold;
+    private TextView quantityInStock;
+    private Button btnCare;
+    private Button btnAddToCart;
+    private Button btnBuy;
+    private Button btnBack;
+    private ImageView imageViewCart;
+    private TextView quantityInCart;
 
 
+    private void mapping() {
+        productImg = findViewById(R.id.productImg);
+        productImgClone = findViewById(R.id.productImgClone);
+//        ImageView view_animation = findViewById(R.id.view_animation);
+//        ImageView view_end_animation = findViewById(R.id.view_end_animation);
+        productName = findViewById(R.id.productName);
+        productDescription = findViewById(R.id.productDescription);
+        productPrice = findViewById(R.id.productPrice);
+        productSold = findViewById(R.id.productSold);
+        quantityInStock = findViewById(R.id.quantityInStock);
+        btnCare = findViewById(R.id.btnCare);
+        btnAddToCart = findViewById(R.id.btnAddToCart);
+        btnBuy = findViewById(R.id.btnBuy);
+        btnBack = findViewById(R.id.btnBack);
+        imageViewCart = findViewById(R.id.imageViewCart);
+        quantityInCart = findViewById(R.id.txvQuantityInCart);
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        ImageView productImg = findViewById(R.id.productImg);
-        ImageView view_animation = findViewById(R.id.view_animation);
-        ImageView view_end_animation = findViewById(R.id.view_end_animation);
-        TextView productName = findViewById(R.id.productName);
-        TextView productDescription = findViewById(R.id.productDescription);
-        TextView productPrice = findViewById(R.id.productPrice);
-        TextView productSold = findViewById(R.id.productSold);
-        TextView quantityInStock = findViewById(R.id.quantityInStock);
-        Button btnCare = findViewById(R.id.btnCare);
-        Button btnAddToCart = findViewById(R.id.btnAddToCart);
-        Button btnBuy = findViewById(R.id.btnBuy);
+        cartDAO = new CartDAO(this);
+        cartDetailDAO = new CartDetailDAO(this);
 
+        currentUser = CommonUtils.getCurrentUser(ProductDetail.this);
+        unpaidCartsExisting = cartDAO.getUnpaidCartsByUserId(currentUser.getUserId());
+        getAllCartDetailsUnpaid = cartDetailDAO.getCartDetailsUnpaidByListCartsUnPaid_HashMap(unpaidCartsExisting);
+
+        totalNumberOfQuantityInCart = cartDetailDAO.totalNumberOfProductsInUnpaidCarts(getAllCartDetailsUnpaid);
+        // Log for debug
+        Log.d(String.valueOf(ProductDetail.this), "The number of unpaid carts that exist: " + String.valueOf(unpaidCartsExisting.size()));
+        Log.d(String.valueOf(ProductDetail.this), "The total quantity in the cart: " + String.valueOf(totalNumberOfQuantityInCart));
+        mapping();
+
+        // First init for cart
+        if(totalNumberOfQuantityInCart > 0) {
+            quantityInCart.setText(String.valueOf(totalNumberOfQuantityInCart));
+        }
+        else {
+            quantityInCart.setText("0");
+            quantityInCart.setVisibility(View.INVISIBLE);
+        }
+
+        btnBack.setOnClickListener(v -> onBackPressed());
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            Product clickedProduct = (Product) bundle.get("obj_product");
+            DecimalFormat formatter = new DecimalFormat("#,###");
 
-            productName.setText("Tên sản phẩm: " + clickedProduct.getProductName());
-            productPrice.setText("Giá bán: " + clickedProduct.getPrice() + "đ");
-            quantityInStock.setText("Số lượng trong kho: " + clickedProduct.getQuantity());
-            productDescription.setText(clickedProduct.getDescription());
-            productSold.setText("Đã bán: " + clickedProduct.getSoldQuantity());
-            productImg.setImageResource(getImageId(this.getApplicationContext(), clickedProduct.getImage()));
+            currentProduct = (Product) bundle.get("obj_product");
+
+            productName.setText(productName.getText().toString() + currentProduct.getProductName());
+            productPrice.setText(formatter.format(currentProduct.getPrice()));
+            quantityInStock.setText("Số lượng trong kho: " + currentProduct.getQuantity());
+            productDescription.setText(currentProduct.getDescription());
+            productSold.setText("Đã bán: " + currentProduct.getSoldQuantity());
+            productImg.setImageResource(getImageId(this.getApplicationContext(), currentProduct.getImage()));
+            productImgClone.setImageResource(getImageId(this.getApplicationContext(), currentProduct.getImage()));
+
         }
 
         Intent intent = new Intent(this, MainActivity.class);
@@ -164,12 +225,13 @@ public class ProductDetail extends AppCompatActivity {
         return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
 
+    // Show bottom sheet dialog cart when user click Add To Cart
     private void showCartDialog() {
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_bottom_sheet_dialog_cart);
-
+        // Mapping views in layout_bottom_sheet_dialog_cart to Objects
         ImageView imageViewThumbnail = dialog.findViewById(R.id.imageViewThumbnail);
         TextView txvPrice = dialog.findViewById(R.id.txvPrice);
         TextView txvQuantity = dialog.findViewById(R.id.txvQuantity);
@@ -179,6 +241,7 @@ public class ProductDetail extends AppCompatActivity {
         Button btnAddToCart_FromCartDialog = dialog.findViewById(R.id.cart_dialog_btnAddToCart);
         Button btnCloseBottomDialog = dialog.findViewById(R.id.btnCloseBottomDialog);
 
+        // Exit dialog when user click X
         btnCloseBottomDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,34 +273,93 @@ public class ProductDetail extends AppCompatActivity {
             }
         });
 
+
         btnAddToCart_FromCartDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(ProductDetail.this, "Added To Cart Successfully", Toast.LENGTH_SHORT).show();
+                /**
+                 * After choosing the quantity of the product, the user clicks to btnAddToCart in dialog.
+                 * It will trigger the event of animation for that action.
+                 * When the animation ends, start performing operations to add products to the cart.
+                 */
+                FrameLayout destView = (FrameLayout) findViewById(R.id.cartFrameLayout);
+
+                new CircleAnimationUtil().attachActivity(ProductDetail.this).setTargetView(productImgClone).setMoveDuration(1000).setDestView(destView).setAnimationListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        // Check whether the product already exists in the cart
+                        int quantityChosen = Integer.valueOf(txvQuantity.getText().toString().trim());
+
+                        if(getAllCartDetailsUnpaid.containsKey(currentProduct.getProductId())) {
+                            CartDetails existsCartDetails = getAllCartDetailsUnpaid.get(currentProduct.getProductId());
+                            existsCartDetails.setQuantity(existsCartDetails.getQuantity() + quantityChosen);
+                            cartDetailDAO.updateCartDetail(existsCartDetails);
+                        }
+                        else {
+                            // create new cart for user
+                            int cartIdInserted = cartDAO.createCart(currentUser.getUserId(), 0);
+                            if(cartIdInserted > 0) {
+                                boolean addCartDetails = cartDetailDAO.createCartDetail(cartIdInserted, currentProduct.getProductId(), quantityChosen);
+                                if(!addCartDetails) {
+                                    Log.d(String.valueOf(ProductDetail.this), "Failed to add product to cart details after created new cart");
+                                }
+                            }
+                            else {
+                                Log.d(String.valueOf(ProductDetail.this), "Failed to create new Cart");
+                            }
+                        }
+                        int currentQuantityInCart = Integer.valueOf(quantityInCart.getText().toString().trim());
+                        currentQuantityInCart += quantityChosen;
+                        quantityInCart.setText(String.valueOf(currentQuantityInCart));
+                        quantityInCart.setVisibility(View.VISIBLE);
+
+
+
+                        dialog.dismiss();
+                        Toast.makeText(ProductDetail.this, "Added To Cart Successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                }).startAnimation();
+
             }
         });
 
 
 
-//        Window window = dialog.getWindow();
-//        if(window == null) {
-//            return;
-//        }
+        Window window = dialog.getWindow();
+        if(window == null) {
+            return;
+        }
 
-//        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        WindowManager.LayoutParams windowAttributes =window.getAttributes();
-//        windowAttributes.gravity = Gravity.BOTTOM;
-//        windowAttributes.windowAnimations =R.style.DialogAnimation;
-//        window.setAttributes(windowAttributes);
-//
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        WindowManager.LayoutParams windowAttributes =window.getAttributes();
+        windowAttributes.gravity = Gravity.BOTTOM;
+        windowAttributes.windowAnimations =R.style.DialogAnimation;
+        window.setAttributes(windowAttributes);
+
 
 
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+//        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
     }
+
 }

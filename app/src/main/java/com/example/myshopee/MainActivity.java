@@ -13,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.myshopee.MyUtils.PreferenceManager;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import DAO.AccountDAO;
 import Model.User;
@@ -58,6 +60,12 @@ public class MainActivity extends AppCompatActivity {
                     if (user != null) {
                         if (user.getRoleId() == 1) { // bug here
                             saveUser(username, password, check);
+                            // use lib Gson to convert object to json, save as string to preferenceShared with key is current_user
+                            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+                            Gson gson = new Gson();
+                            String objectToJson = gson.toJson(user);
+                            preferenceManager.putString("current_user", objectToJson);
+
                             Intent intent = new Intent(MainActivity.this, Home.class);
                             intent.putExtra("welcomeMessage", "Xin chào, " + username + "!");
                             Bundle bundle = new Bundle();
@@ -98,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private void saveUser(String user, String pwd, boolean check) {
         SharedPreferences pref = getSharedPreferences("information.dat", MODE_PRIVATE);
         SharedPreferences.Editor editor = pref.edit();
+
         if (check) {
             editor.putString("username", user);
             editor.putString("password", pwd);

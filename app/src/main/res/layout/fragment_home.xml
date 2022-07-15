@@ -1,10 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/Theme.MyShopee"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        app:layout_collapseMode="pin">
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/restaurantA.btn_share"-->
+<!--            style="@style/Button.CrystalClear"-->
+<!--            android:layout_width="40dp"-->
+<!--            android:layout_height="40dp"-->
+<!--            android:layout_gravity="right"-->
+<!--            android:insetLeft="0dp"-->
+<!--            android:insetTop="0dp"-->
+<!--            android:insetRight="0dp"-->
+<!--            android:insetBottom="0dp"-->
+<!--            app:icon="@drawable/ic_cart_shopping_light"-->
+<!--            app:iconGravity="textStart"-->
+<!--            app:iconPadding="0dp"-->
+<!--            app:iconSize="28sp"-->
+<!--            app:iconTint="@color/white" />-->
+
+        <FrameLayout
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/crystal_clear_button_bg"
+            android:layout_gravity="right"
+            >
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@drawable/ic_cart_shopping_light"
+                android:scaleType="fitCenter"
+                android:layout_gravity="center"
+
+                />
+
+            <!--                    <com.google.android.material.button.MaterialButton-->
+            <!--                        android:id="@+id/btnCart"-->
+            <!--                        android:layout_width="40dp"-->
+            <!--                        android:layout_height="40dp"-->
+            <!--                        style="@style/Button.CrystalClear"-->
+            <!--                        app:icon="@drawable/ic_cart_shopping_light"-->
+            <!--                        android:insetLeft="0dp"-->
+            <!--                        android:insetBottom="0dp"-->
+            <!--                        android:insetRight="0dp"-->
+            <!--                        android:insetTop="0dp"-->
+            <!--                        app:iconPadding="0dp"-->
+            <!--                        app:iconGravity="textStart"-->
+            <!--                        app:iconTint="@color/white"-->
+            <!--                        app:iconSize="28sp"-->
+            <!--                        android:layout_gravity="center_vertical" />-->
+            <TextView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:text="1"
+                android:textColor="@color/white"
+                android:background="@drawable/badge_shape"
+                android:layout_gravity="top|end"
+                android:gravity="center"
+                style="@style/TextAppearance.MaterialComponents.Caption"
+
+                />
+
+        </FrameLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rec"
@@ -13,5 +88,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-</LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_below="@id/toolbar"
+        />
+</RelativeLayout>

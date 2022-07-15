@@ -42,13 +42,19 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:weightSum="1">
-
-                <ImageView
-                    android:id="@+id/imageViewThumbnail"
+                <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="140dp"
                     android:layout_weight="0.4"
-                    android:src="@drawable/product4" />
+                    >
+                    <ImageView
+                        android:id="@+id/imageViewThumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/product4" />
+
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"

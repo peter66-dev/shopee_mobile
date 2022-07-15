@@ -4,11 +4,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import Database.MyDatabase;
 import Model.Cart;
@@ -30,7 +33,7 @@ public class CartDetailDAO {
     public List<CartDetails> getCartDetailsUnpaidByListCartsUnPaid(ArrayList<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
         List<CartDetails> list = new ArrayList<>();
         SQLiteDatabase db = mydata.getReadableDatabase();
-        Cursor cs = db.rawQuery("select * from CARTS where cartId in (?)", new String[]{convertToString(carts)});
+        Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + convertToString(carts) + ")", null);
         if (cs != null && cs.getCount() > 0) {
             cs.moveToFirst();
             while (!cs.isAfterLast()) {
@@ -46,6 +49,37 @@ public class CartDetailDAO {
         return list;
     }
 
+    // Tổng sản lượng sản phẩm ở mỗi giỏ hàng chưa thanh toán
+    public int totalNumberOfProductsInUnpaidCarts(HashMap<Integer, CartDetails> unpaidCartDetails) {
+        int quantity = 0;
+        for(Map.Entry<Integer, CartDetails> set: unpaidCartDetails.entrySet()) {
+            quantity += set.getValue().getQuantity();
+        }
+        return quantity;
+    }
+
+    public HashMap<Integer, CartDetails> getCartDetailsUnpaidByListCartsUnPaid_HashMap(List<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
+        HashMap<Integer, CartDetails> list = new HashMap<>();
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + convertToString(carts) + ")", null);
+//        if (cs != null && cs.getCount() > 0) {
+            cs.moveToFirst();
+            while (!cs.isAfterLast()) {
+                int id = cs.getInt(0);
+                int cartId = cs.getInt(1);
+                int productId = cs.getInt(2);
+                int quantity = cs.getInt(3);
+
+                CartDetails details = new CartDetails(id, cartId, productId, quantity);
+                list.put(productId, details);
+                Log.d(String.valueOf(CartDetailDAO.this), "details: " + details.toString());
+                cs.moveToNext();
+            }
+//        }
+
+        cs.close();
+        return list;
+    }
 
     /*
      * default quantity in database: 1
@@ -64,7 +98,7 @@ public class CartDetailDAO {
         return check;
     }
 
-    private String convertToString(ArrayList<Cart> list) {
+    private String convertToString(List<Cart> list) {
         String result = "";
         for (int i = 0; i < list.size(); i++) {
             if (i == list.size() - 1) {
@@ -73,6 +107,19 @@ public class CartDetailDAO {
                 result += list.get(i).getCartId() + ", ";
             }
         }
+        Log.d(String.valueOf(CartDetailDAO.this), "Convert to String: " + result);
         return result;
+    }
+
+    public void updateCartDetail(CartDetails cartDetails) {
+        SQLiteDatabase db = mydata.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Id", cartDetails.getCartDetailId());
+        values.put("CartId", cartDetails.getCartId());
+        values.put("ProductId", cartDetails.getProductId());
+        values.put("Quantity", cartDetails.getQuantity());
+
+        db.update("CARTDETAILS", values, "Id = ?", new String[] {String.valueOf(cartDetails.getCartDetailId())});
+        db.close();
     }
 }

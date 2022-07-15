@@ -4,4 +4,5 @@
     <string name="bottom_favorite">Favorite</string>
     <string name="bottom_cart">Cart</string>
     <string name="bottom_me">Me</string>
+    <string name="currency_underline_text"><u>đ</u></string>
 </resources>
