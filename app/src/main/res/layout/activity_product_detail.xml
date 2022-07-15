@@ -6,131 +6,319 @@
     android:layout_height="match_parent"
     tools:context=".ProductDetail">
 
-    <ImageView
-        android:id="@+id/view_animation"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:visibility="invisible" />
-
-    <ImageView
-        android:id="@+id/productImg"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/restaurantA_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="260dp" />
-
-    <LinearLayout
-        android:id="@+id/priceAndSold"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/productImg"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_weight="2"
-            android:textAlignment="textStart">
-
-            <TextView
-                android:id="@+id/productPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:text="Giá bán: 32000đ"
-                android:textColor="@android:color/holo_red_light"
-                android:textSize="10dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:paddingEnd="5dp"
-            android:textAlignment="textEnd">
-
-            <TextView
-                android:id="@+id/productSold"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:text="Đã bán 3200"
-                android:textColor="@android:color/black"
-                android:textSize="8dp" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/productName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/priceAndSold"
-        android:paddingLeft="3dp"
-        android:text="Tên sản phẩm: Áo xịn"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/quantityInStock"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/productName"
-        android:paddingLeft="3dp"
-        android:text="Số lượng trong kho: 1200" />
-
-    <TextView
-        android:id="@+id/productDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/quantityInStock"
-        android:paddingLeft="3dp"
-        android:text="Mô tả chi tiết: Sản phẩm rất tốt cho trẻ sơ sinh và trẻ nhỏ!" />
-
-    <Button
-        android:id="@+id/btnCare"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/productDescription"
-        android:background="#ED2D5B"
-        android:text="Quan tâm" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="45dp"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="0dp"
+        app:contentInsetEnd="0dp"
+        app:contentInsetStart="0dp"
+        android:layout_marginTop="20dp"
+        android:clipToPadding="true"
         >
 
-        <ImageView
-            android:id="@+id/view_end_animation"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="10dp"
-            android:visibility="gone"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:gravity="center_horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    style="@style/Button.CrystalClear"
+                    app:icon="@drawable/ic_arrow_left_long_light"
+                    android:insetLeft="0dp"
+                    android:insetBottom="0dp"
+                    android:insetRight="0dp"
+                    android:insetTop="0dp"
+                    app:iconPadding="0dp"
+                    app:iconGravity="textStart"
+                    app:iconSize="30sp"
+                    app:iconTint="@color/white"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.7"
+                android:background="@color/transparent">
+
+
+            </View>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.15"
+                android:gravity="center_horizontal"
+                >
+                <FrameLayout
+                    android:id="@+id/cartFrameLayout"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/crystal_clear_button_bg"
+                    >
+                    <ImageView
+                        android:id="@+id/imageViewCart"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:src="@drawable/ic_cart_shopping_light"
+                        android:scaleType="fitCenter"
+                        android:layout_gravity="center"
+
+                        />
+
+<!--                    <com.google.android.material.button.MaterialButton-->
+<!--                        android:id="@+id/btnCart"-->
+<!--                        android:layout_width="40dp"-->
+<!--                        android:layout_height="40dp"-->
+<!--                        style="@style/Button.CrystalClear"-->
+<!--                        app:icon="@drawable/ic_cart_shopping_light"-->
+<!--                        android:insetLeft="0dp"-->
+<!--                        android:insetBottom="0dp"-->
+<!--                        android:insetRight="0dp"-->
+<!--                        android:insetTop="0dp"-->
+<!--                        app:iconPadding="0dp"-->
+<!--                        app:iconGravity="textStart"-->
+<!--                        app:iconTint="@color/white"-->
+<!--                        app:iconSize="28sp"-->
+<!--                        android:layout_gravity="center_vertical" />-->
+                    <TextView
+                        android:id="@+id/txvQuantityInCart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:text="1"
+                        android:textColor="@color/white"
+                        android:background="@drawable/badge_shape"
+                        android:layout_gravity="top|end"
+                        android:gravity="center"
+                        style="@style/TextAppearance.MaterialComponents.Caption"
+
+                        />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.55"
+            >
+            <ImageView
+                android:id="@+id/productImgClone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/p11"
+                android:scaleType="fitCenter"
+                />
+            <ImageView
+                android:id="@+id/productImg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/p11"
+                android:scaleType="fitCenter"
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.45"
+            android:orientation="vertical"
+
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Yêu thích"
+                    android:textStyle="bold"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColor="@color/white"
+                    android:background="@color/ubuntu_orange"
+                    />
+
+                <TextView
+                    android:id="@+id/productName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="\t\t\t\t\t\t\t\t\t\t"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+
+                    />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
+                android:paddingLeft="10dp"
+                >
+                <TextView
+                    android:id="@+id/currency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/currency_underline_text"
+                    android:textSize="17sp"
+                    android:textColor="@color/red"
+
+                    />
+
+                <TextView
+                    android:id="@+id/productPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/currency"
+                    android:text="80.000"
+                    android:textColor="@color/red"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/quantityInStock"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Số lượng trong kho: 1200"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#F5F5F5"
+                android:layout_gravity="bottom" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/underline"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chi tiết"
+                    android:padding="10dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:gravity="left"
+                    />
+                <TextView
+                    android:id="@+id/productSold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Đã bán: 999"
+                    android:gravity="right"
+                    android:paddingRight="10dp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/productDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="Sản phẩm rất tốt cho trẻ sơ sinh và trẻ nhỏ"
+                />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnCare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/productDescription"
+            android:background="#ED2D5B"
+            android:text="Quan tâm" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+
+<!--        <ImageView-->
+<!--            android:id="@+id/view_end_animation"-->
+<!--            android:layout_width="60dp"-->
+<!--            android:layout_height="60dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            android:visibility="gone"-->
+<!--            />-->
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAddToCart"
-            android:layout_width="60dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="-6dp"
-            android:backgroundTint="@color/blue"
+            android:layout_weight="0.3"
+            android:backgroundTint="#26AB9A"
             app:cornerRadius="0dp"
-            app:icon="@drawable/cart"
-            tools:ignore="SpeakableTextPresentCheck" />
+            app:icon="@drawable/ic_cart_plus_light"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetRight="0dp"
+            android:insetTop="0dp"
+            app:iconPadding="0dp"
+            app:iconGravity="textStart"
+            app:iconSize="28sp"
+            />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBuy"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginBottom="-6dp"
-            android:layout_weight="1"
-            android:backgroundTint="@color/red"
+            android:layout_weight="0.7"
+            android:backgroundTint="@color/ubuntu_orange"
             android:text="Mua ngay"
+            android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:cornerRadius="0dp"
-            app:strokeWidth="0dp" />
+            app:strokeWidth="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetLeft="0dp"
+            android:insetBottom="0dp"
+            />
     </LinearLayout>
 
 </RelativeLayout>

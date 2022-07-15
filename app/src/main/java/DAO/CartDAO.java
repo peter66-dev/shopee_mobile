@@ -83,13 +83,13 @@ public class CartDAO {
         return list;
     }
 
-    public boolean createCart(int userId, int isPaid) {
+    public int createCart(int userId, int isPaid) {
         SQLiteDatabase db = mydata.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("UserId", userId);
         contentValues.put("IsPaid", isPaid);
         long row = db.insert("CARTS", null, contentValues);
-        return row > 0;
+        return (int) row;
     }
 
     public boolean updatePaymentStatusByCartId(int cartId, int isPaid) { // Chỉ được update status isPaid: 0 1
