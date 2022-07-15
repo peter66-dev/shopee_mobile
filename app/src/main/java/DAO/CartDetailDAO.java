@@ -33,7 +33,7 @@ public class CartDetailDAO {
     public List<CartDetails> getCartDetailsUnpaidByListCartsUnPaid(ArrayList<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
         List<CartDetails> list = new ArrayList<>();
         SQLiteDatabase db = mydata.getReadableDatabase();
-        Cursor cs = db.rawQuery("select * from CARTS where cartId in (?)", new String[]{convertToString(carts)});
+        Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + convertToString(carts) + ")", null);
         if (cs != null && cs.getCount() > 0) {
             cs.moveToFirst();
             while (!cs.isAfterLast()) {
