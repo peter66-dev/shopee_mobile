@@ -15,4 +15,10 @@ public class CommonUtils {
         User currentUser = gson.fromJson(jsonToObject, User.class);
         return currentUser;
     }
+
+    public static int getImageId(Context context, String imageName) {
+        Log.i("[PETER MESSAGE]", "Image source:  " + imageName);
+        Log.i("[PETER MESSAGE]", "Image index:  " + context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName()));
+        return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
+    }
 }

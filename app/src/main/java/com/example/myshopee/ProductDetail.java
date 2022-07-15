@@ -2,6 +2,7 @@ package com.example.myshopee;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.animation.Animator;
 import android.app.Dialog;
@@ -115,6 +116,14 @@ public class ProductDetail extends AppCompatActivity {
         }
 
         btnBack.setOnClickListener(v -> onBackPressed());
+
+        imageViewCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductDetail.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

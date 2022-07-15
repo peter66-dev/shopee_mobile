@@ -209,10 +209,9 @@
                     android:id="@+id/quantityInStock"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Số lượng trong kho: 1200"
                     android:gravity="right"
                     android:paddingRight="10dp"
-                    />
+                    android:text="Số lượng trong kho: 1200" />
             </RelativeLayout>
             <View
                 android:layout_width="match_parent"
