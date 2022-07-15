@@ -78,7 +78,7 @@ public class ProductDAO {
             check = quantity <= quantityInStock;
         }
         return check;
-
+    }
 
     public boolean buyMethod(int id, int buyQuantity) { // trừ quantity in stock & cộng soldQuantity
         boolean check = false;
