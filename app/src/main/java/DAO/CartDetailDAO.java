@@ -30,7 +30,7 @@ public class CartDetailDAO {
      * input: ArrayList<Cart> carts
      * output: List<CartDetails>
      * */
-    public List<CartDetails> getCartDetailsUnpaidByListCartsUnPaid(ArrayList<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
+    public List<CartDetails> getCartDetailsUnpaidByListCartsUnPaid(List<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
         List<CartDetails> list = new ArrayList<>();
         SQLiteDatabase db = mydata.getReadableDatabase();
         Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + convertToString(carts) + ")", null);
@@ -122,4 +122,6 @@ public class CartDetailDAO {
         db.update("CARTDETAILS", values, "Id = ?", new String[] {String.valueOf(cartDetails.getCartDetailId())});
         db.close();
     }
+
+
 }

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyShopee">
         <activity
-            android:name=".Cart"
+            android:name=".CartActivity"
             android:exported="false" />
         <activity
             android:name=".Register"
