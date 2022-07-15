@@ -17,11 +17,28 @@ public class AccountDAO {
         this.mydata = new MyDatabase(context);
     }
 
+    public User getUserById(int userId) {
+        User acc = null;
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        Cursor cs = db.rawQuery("select * from ACCOUNTS where userid =?", new String[]{String.valueOf(userId)});
+        if (cs != null && cs.getCount() > 0) {
+            cs.moveToFirst();
+            int role = cs.getInt(3);
+            String username = cs.getString(1);
+            String password = cs.getString(2);
+            double budget = cs.getDouble(4);
+            String address = cs.getString(5);
+            String phone = cs.getString(6);
+            acc = new User(userId, username, password, address, phone, budget, role);
+        }
+        return acc;
+    }
+
     public User checkLogin(String username, String password) {
         User acc = null;
         SQLiteDatabase db = mydata.getReadableDatabase();
         Cursor cs = db.rawQuery("select * from ACCOUNTS where Username =? and Password=?", new String[]{username, password});
-        if (cs.getCount() > 0) {
+        if (cs != null && cs.getCount() > 0) {
             cs.moveToFirst();
             int userId = cs.getInt(0);
             int role = cs.getInt(3);
@@ -82,5 +99,25 @@ public class AccountDAO {
         SQLiteDatabase db = mydata.getWritableDatabase();
         int row = db.delete("ACCOUNTS", "username=?", new String[]{username});
         return row > 0;
+    }
+
+    public boolean checkBudget(int userid, double totalBill) {
+        boolean check = false;
+        SQLiteDatabase read = mydata.getReadableDatabase();
+        Cursor cs = read.rawQuery("select * from ACCOUNTS where UserId =?", new String[]{String.valueOf(userid)});
+        if (cs != null && cs.getCount() > 0) {
+            cs.moveToFirst();
+            double budget = cs.getDouble(3);
+            check = totalBill <= budget;
+        }
+        return check;
+    }
+
+    public boolean subBudget(int userid, double totalBill) {
+        SQLiteDatabase db = mydata.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        User user = getUserById(userid);
+        contentValues.put("Budget", user.getBudget() - totalBill);
+        return db.update("ACCOUNTS", contentValues, "userid=?", new String[]{String.valueOf(userid)}) > 0;
     }
 }

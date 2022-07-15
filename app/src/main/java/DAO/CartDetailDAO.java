@@ -49,10 +49,31 @@ public class CartDetailDAO {
         return list;
     }
 
+    public CartDetails getCartDetailsById(int cartDetailId) {
+        CartDetails cartDetails = new CartDetails();
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + cartDetailId + ")", null);
+        if (cs != null && cs.getCount() > 0) {
+            cs.moveToFirst();
+            if (!cs.isAfterLast()) {
+                int id = cs.getInt(0);
+                int cartId = cs.getInt(1);
+                int productId = cs.getInt(2);
+                int quantity = cs.getInt(3);
+                cartDetails.setCartDetailId(cs.getInt(0));
+                cartDetails.setCartId(cs.getInt(1));
+                cartDetails.setProductId(cs.getInt(2));
+                cartDetails.setQuantity(cs.getInt(3));
+            }
+        }
+        cs.close();
+        return cartDetails;
+    }
+
     // Tổng sản lượng sản phẩm ở mỗi giỏ hàng chưa thanh toán
     public int totalNumberOfProductsInUnpaidCarts(HashMap<Integer, CartDetails> unpaidCartDetails) {
         int quantity = 0;
-        for(Map.Entry<Integer, CartDetails> set: unpaidCartDetails.entrySet()) {
+        for (Map.Entry<Integer, CartDetails> set : unpaidCartDetails.entrySet()) {
             quantity += set.getValue().getQuantity();
         }
         return quantity;
@@ -63,18 +84,18 @@ public class CartDetailDAO {
         SQLiteDatabase db = mydata.getReadableDatabase();
         Cursor cs = db.rawQuery("select * from CARTDETAILS where CartId in(" + convertToString(carts) + ")", null);
 //        if (cs != null && cs.getCount() > 0) {
-            cs.moveToFirst();
-            while (!cs.isAfterLast()) {
-                int id = cs.getInt(0);
-                int cartId = cs.getInt(1);
-                int productId = cs.getInt(2);
-                int quantity = cs.getInt(3);
+        cs.moveToFirst();
+        while (!cs.isAfterLast()) {
+            int id = cs.getInt(0);
+            int cartId = cs.getInt(1);
+            int productId = cs.getInt(2);
+            int quantity = cs.getInt(3);
 
-                CartDetails details = new CartDetails(id, cartId, productId, quantity);
-                list.put(productId, details);
-                Log.d(String.valueOf(CartDetailDAO.this), "details: " + details.toString());
-                cs.moveToNext();
-            }
+            CartDetails details = new CartDetails(id, cartId, productId, quantity);
+            list.put(productId, details);
+            Log.d(String.valueOf(CartDetailDAO.this), "details: " + details.toString());
+            cs.moveToNext();
+        }
 //        }
 
         cs.close();
@@ -119,7 +140,14 @@ public class CartDetailDAO {
         values.put("ProductId", cartDetails.getProductId());
         values.put("Quantity", cartDetails.getQuantity());
 
-        db.update("CARTDETAILS", values, "Id = ?", new String[] {String.valueOf(cartDetails.getCartDetailId())});
+        db.update("CARTDETAILS", values, "Id = ?", new String[]{String.valueOf(cartDetails.getCartDetailId())});
         db.close();
     }
+
+    public boolean deleteCartDetails(int id) {
+        SQLiteDatabase db = mydata.getWritableDatabase();
+        return db.delete("CARTDETAILS", "id = ?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+
 }

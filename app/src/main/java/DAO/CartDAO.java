@@ -102,4 +102,18 @@ public class CartDAO {
         }
         return check;
     }
+
+    public boolean deleteCart(int cartId) {
+        SQLiteDatabase db = mydata.getWritableDatabase();
+        return db.delete("CARTS", "CartId = ?", new String[]{String.valueOf(cartId)}) > 0;
+    }
+
+    public boolean changeStatusIsPaid(int cartId) { // khi user đủ điều kiện thanh toán thì set IsPaid = 1 (Đã thanh toán!)
+        SQLiteDatabase db = mydata.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("IsPaid", 1);
+        return db.update("CARTS", contentValues, "cartId=?", new String[]{String.valueOf(cartId)}) > 0;
+    }
+
+
 }
