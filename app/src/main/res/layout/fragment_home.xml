@@ -41,6 +41,7 @@
             android:layout_gravity="right"
             >
             <ImageView
+                android:id="@+id/imageViewCart"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_cart_shopping_light"
@@ -49,22 +50,8 @@
 
                 />
 
-            <!--                    <com.google.android.material.button.MaterialButton-->
-            <!--                        android:id="@+id/btnCart"-->
-            <!--                        android:layout_width="40dp"-->
-            <!--                        android:layout_height="40dp"-->
-            <!--                        style="@style/Button.CrystalClear"-->
-            <!--                        app:icon="@drawable/ic_cart_shopping_light"-->
-            <!--                        android:insetLeft="0dp"-->
-            <!--                        android:insetBottom="0dp"-->
-            <!--                        android:insetRight="0dp"-->
-            <!--                        android:insetTop="0dp"-->
-            <!--                        app:iconPadding="0dp"-->
-            <!--                        app:iconGravity="textStart"-->
-            <!--                        app:iconTint="@color/white"-->
-            <!--                        app:iconSize="28sp"-->
-            <!--                        android:layout_gravity="center_vertical" />-->
             <TextView
+                android:id="@+id/txvQuantityInCart"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:text="1"

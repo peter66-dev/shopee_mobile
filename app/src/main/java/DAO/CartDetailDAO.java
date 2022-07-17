@@ -19,10 +19,13 @@ import Model.CartDetails;
 import Model.User;
 
 public class CartDetailDAO {
-    MyDatabase mydata;
+    private  final MyDatabase mydata;
 
     public CartDetailDAO(Context context) {
-        this.mydata = new MyDatabase(context);
+
+//        this.mydata = new MyDatabase(context);
+        this.mydata = MyDatabase.getInstance(context);
+
     }
 
     /*
@@ -46,6 +49,7 @@ public class CartDetailDAO {
             }
         }
         cs.close();
+        db.close();
         return list;
     }
 
@@ -67,6 +71,7 @@ public class CartDetailDAO {
             }
         }
         cs.close();
+        db.close();
         return cartDetails;
     }
 
@@ -78,6 +83,16 @@ public class CartDetailDAO {
         }
         return quantity;
     }
+
+    public int totalNumberOfProductsInUnpaidCarts(List<CartDetails> unpaidCartDetails) {
+        int quantity = 0;
+        for (CartDetails cartDetail : unpaidCartDetails) {
+            quantity += cartDetail.getQuantity();
+        }
+        return quantity;
+    }
+
+
 
     public HashMap<Integer, CartDetails> getCartDetailsUnpaidByListCartsUnPaid_HashMap(List<Cart> carts) { // lấy list carts unpaid bên cartDAO trước(getUnpaidCartsByUserId) rồi truyền vô đây!!!
         HashMap<Integer, CartDetails> list = new HashMap<>();
@@ -93,12 +108,13 @@ public class CartDetailDAO {
 
             CartDetails details = new CartDetails(id, cartId, productId, quantity);
             list.put(productId, details);
-            Log.d(String.valueOf(CartDetailDAO.this), "details: " + details.toString());
+            Log.d(String.valueOf(CartDetailDAO.this), "Key: " + String.valueOf(productId) + ", details: " + details.toString());
             cs.moveToNext();
         }
 //        }
 
         cs.close();
+        db.close();
         return list;
     }
 
@@ -115,6 +131,7 @@ public class CartDetailDAO {
             contentValues.put("ProductId", productId);
             contentValues.put("Quantity", quantity);
             check = db.insert("CARTDETAILS", null, contentValues) > 0;
+            db.close();
         }
         return check;
     }
@@ -146,7 +163,9 @@ public class CartDetailDAO {
 
     public boolean deleteCartDetails(int id) {
         SQLiteDatabase db = mydata.getWritableDatabase();
-        return db.delete("CARTDETAILS", "id = ?", new String[]{String.valueOf(id)}) > 0;
+        boolean delete = db.delete("CARTDETAILS", "id = ?", new String[]{String.valueOf(id)}) > 0;
+        db.close();
+        return delete;
     }
 
 

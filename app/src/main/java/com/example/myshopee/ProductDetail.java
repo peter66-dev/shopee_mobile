@@ -53,6 +53,7 @@ public class ProductDetail extends AppCompatActivity {
     private int totalNumberOfQuantityInCart = 0;
     private HashMap<Integer, CartDetails> getAllCartDetailsUnpaid;
 
+    private boolean shouldRefreshOnResume = false;
     private ImageView productImg;
     private ImageView productImgClone;
     private TextView productName;
@@ -88,25 +89,17 @@ public class ProductDetail extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_detail);
-
-        cartDAO = new CartDAO(this);
-        cartDetailDAO = new CartDetailDAO(this);
-
-        currentUser = CommonUtils.getCurrentUser(ProductDetail.this);
+    private void refreshInResumeState() {
         unpaidCartsExisting = cartDAO.getUnpaidCartsByUserId(currentUser.getUserId());
         getAllCartDetailsUnpaid = cartDetailDAO.getCartDetailsUnpaidByListCartsUnPaid_HashMap(unpaidCartsExisting);
 
         totalNumberOfQuantityInCart = cartDetailDAO.totalNumberOfProductsInUnpaidCarts(getAllCartDetailsUnpaid);
+
         // Log for debug
         Log.d(String.valueOf(ProductDetail.this), "The number of unpaid carts that exist: " + String.valueOf(unpaidCartsExisting.size()));
         Log.d(String.valueOf(ProductDetail.this), "The total quantity in the cart: " + String.valueOf(totalNumberOfQuantityInCart));
-        mapping();
 
-        // First init for cart
+        // Init for cart
         if(totalNumberOfQuantityInCart > 0) {
             quantityInCart.setText(String.valueOf(totalNumberOfQuantityInCart));
         }
@@ -114,6 +107,35 @@ public class ProductDetail extends AppCompatActivity {
             quantityInCart.setText("0");
             quantityInCart.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_product_detail);
+        mapping();
+        cartDAO = new CartDAO(this);
+        cartDetailDAO = new CartDetailDAO(this);
+
+        currentUser = CommonUtils.getCurrentUser(ProductDetail.this);
+        refreshInResumeState();
+//        unpaidCartsExisting = cartDAO.getUnpaidCartsByUserId(currentUser.getUserId());
+//        getAllCartDetailsUnpaid = cartDetailDAO.getCartDetailsUnpaidByListCartsUnPaid_HashMap(unpaidCartsExisting);
+//
+//        totalNumberOfQuantityInCart = cartDetailDAO.totalNumberOfProductsInUnpaidCarts(getAllCartDetailsUnpaid);
+//        // Log for debug
+//        Log.d(String.valueOf(ProductDetail.this), "The number of unpaid carts that exist: " + String.valueOf(unpaidCartsExisting.size()));
+//        Log.d(String.valueOf(ProductDetail.this), "The total quantity in the cart: " + String.valueOf(totalNumberOfQuantityInCart));
+//
+//
+//        // Init for cart
+//        if(totalNumberOfQuantityInCart > 0) {
+//            quantityInCart.setText(String.valueOf(totalNumberOfQuantityInCart));
+//        }
+//        else {
+//            quantityInCart.setText("0");
+//            quantityInCart.setVisibility(View.INVISIBLE);
+//        }
 
         btnBack.setOnClickListener(v -> onBackPressed());
 
@@ -130,7 +152,7 @@ public class ProductDetail extends AppCompatActivity {
             DecimalFormat formatter = new DecimalFormat("#,###");
 
             currentProduct = (Product) bundle.get("obj_product");
-
+            Log.d(String.valueOf(ProductDetail.this), "CurrentProduct in details view: " + currentProduct.toString());
             productName.setText(productName.getText().toString() + currentProduct.getProductName());
             productPrice.setText(formatter.format(currentProduct.getPrice()));
             quantityInStock.setText("Số lượng trong kho: " + currentProduct.getQuantity());
@@ -244,11 +266,18 @@ public class ProductDetail extends AppCompatActivity {
         ImageView imageViewThumbnail = dialog.findViewById(R.id.imageViewThumbnail);
         TextView txvPrice = dialog.findViewById(R.id.txvPrice);
         TextView txvQuantity = dialog.findViewById(R.id.txvQuantity);
+        TextView txvQuantityInStock = dialog.findViewById(R.id.txvQuantityInStock);
         Button btnDecreaseQuantity = dialog.findViewById(R.id.btnDecreaseQuantity);
         btnDecreaseQuantity.setEnabled(false);
         Button btnIncreaseQuantity = dialog.findViewById(R.id.btnIncreaseQuantity);
         Button btnAddToCart_FromCartDialog = dialog.findViewById(R.id.cart_dialog_btnAddToCart);
         Button btnCloseBottomDialog = dialog.findViewById(R.id.btnCloseBottomDialog);
+
+        DecimalFormat formatter = new DecimalFormat("#,###");
+
+        txvPrice.setText(formatter.format(currentProduct.getPrice()));
+        txvQuantityInStock.setText("Kho: " + currentProduct.getQuantity());
+        imageViewThumbnail.setImageResource(getImageId(this.getApplicationContext(), currentProduct.getImage()));
 
         // Exit dialog when user click X
         btnCloseBottomDialog.setOnClickListener(new View.OnClickListener() {
@@ -305,9 +334,12 @@ public class ProductDetail extends AppCompatActivity {
                         int quantityChosen = Integer.valueOf(txvQuantity.getText().toString().trim());
 
                         if(getAllCartDetailsUnpaid.containsKey(currentProduct.getProductId())) {
+                            Log.d(String.valueOf(ProductDetail.this), "getAllCartDetailsUnpaid contains ProductId: " + currentProduct.getProductId());
+                            Log.d(String.valueOf(ProductDetail.this), "getAllCartDetailsUnpaid get value with ProductId: " + getAllCartDetailsUnpaid.get(currentProduct.getProductId()).toString());
                             CartDetails existsCartDetails = getAllCartDetailsUnpaid.get(currentProduct.getProductId());
                             existsCartDetails.setQuantity(existsCartDetails.getQuantity() + quantityChosen);
                             cartDetailDAO.updateCartDetail(existsCartDetails);
+                            getAllCartDetailsUnpaid.put(currentProduct.getProductId(), existsCartDetails);
                         }
                         else {
                             // create new cart for user
@@ -316,6 +348,9 @@ public class ProductDetail extends AppCompatActivity {
                                 boolean addCartDetails = cartDetailDAO.createCartDetail(cartIdInserted, currentProduct.getProductId(), quantityChosen);
                                 if(!addCartDetails) {
                                     Log.d(String.valueOf(ProductDetail.this), "Failed to add product to cart details after created new cart");
+                                } else {
+                                    CartDetails cartInserted = cartDetailDAO.getCartDetailsById(cartIdInserted);
+                                    getAllCartDetailsUnpaid.put(currentProduct.getProductId(), cartInserted);
                                 }
                             }
                             else {
@@ -364,11 +399,22 @@ public class ProductDetail extends AppCompatActivity {
 
 
         dialog.show();
-//        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-//        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-//        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        shouldRefreshOnResume = true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(shouldRefreshOnResume) {
+            Log.d(String.valueOf(ProductDetail.this), "Start Refresh on Resume");
+            refreshInResumeState();
+        }
+//        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
+    }
 }

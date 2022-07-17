@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import com.example.myshopee.MyUtils.CommonUtils;
 
 import java.util.ArrayList;
 
@@ -11,10 +14,13 @@ import Database.MyDatabase;
 import Model.User;
 
 public class AccountDAO {
-    MyDatabase mydata;
+    private final MyDatabase mydata;
 
     public AccountDAO(Context context) {
-        this.mydata = new MyDatabase(context);
+
+//        this.mydata = new MyDatabase(context);
+        this.mydata = MyDatabase.getInstance(context);
+
     }
 
     public User getUserById(int userId) {
@@ -31,6 +37,7 @@ public class AccountDAO {
             String phone = cs.getString(6);
             acc = new User(userId, username, password, address, phone, budget, role);
         }
+        db.close();
         return acc;
     }
 
@@ -47,6 +54,7 @@ public class AccountDAO {
             String phone = cs.getString(6);
             acc = new User(userId, username, password, address, phone, budget, role);
         }
+        db.close();
         return acc;
     }
 
@@ -56,6 +64,7 @@ public class AccountDAO {
         ContentValues values = new ContentValues();
         values.put("password", user.getPassword());
         int row = db.update("ACCOUNTS", values, "username=?", new String[]{user.getUserName()});
+        db.close();
         return row > 0;
     }
 
@@ -77,6 +86,7 @@ public class AccountDAO {
             cs.moveToNext();
         }
         cs.close();
+        db.close();
         return list;
     }
 
@@ -91,6 +101,7 @@ public class AccountDAO {
         contentValues.put("Budget", 500000);
         contentValues.put("RoleId", 1);
         long row = db.insert("ACCOUNTS", null, contentValues);
+        db.close();
         return row > 0;
     }
 
@@ -98,6 +109,7 @@ public class AccountDAO {
     public boolean delete(String username) {
         SQLiteDatabase db = mydata.getWritableDatabase();
         int row = db.delete("ACCOUNTS", "username=?", new String[]{username});
+        db.close();
         return row > 0;
     }
 
@@ -107,17 +119,24 @@ public class AccountDAO {
         Cursor cs = read.rawQuery("select * from ACCOUNTS where UserId =?", new String[]{String.valueOf(userid)});
         if (cs != null && cs.getCount() > 0) {
             cs.moveToFirst();
-            double budget = cs.getDouble(3);
+            double budget = cs.getDouble(4);
+            Log.d(String.valueOf(AccountDAO.this), "Get current budget from accountDAO: " + CommonUtils.getReadableCostFromDouble(budget));
+
             check = totalBill <= budget;
+            Log.d(String.valueOf(AccountDAO.this), "Check budget from accountDAO: " + check);
         }
+        cs.close();
+        read.close();
         return check;
     }
 
     public boolean subBudget(int userid, double totalBill) {
+        User user = getUserById(userid);
         SQLiteDatabase db = mydata.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        User user = getUserById(userid);
         contentValues.put("Budget", user.getBudget() - totalBill);
-        return db.update("ACCOUNTS", contentValues, "userid=?", new String[]{String.valueOf(userid)}) > 0;
+        boolean update = db.update("ACCOUNTS", contentValues, "UserId=?", new String[]{String.valueOf(userid)}) > 0;
+        db.close();
+        return update;
     }
 }

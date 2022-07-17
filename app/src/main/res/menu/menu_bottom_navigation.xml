@@ -4,11 +4,11 @@
 
     <item android:id="@+id/bottom_home"
         android:title="@string/bottom_home"
-        android:icon="@drawable/ic_home"/>
-    <item android:id="@+id/bottom_cart"
-        android:title="@string/bottom_cart"
-        android:icon="@drawable/cart"/>
-    <item android:id="@+id/bottom_me"
+        android:icon="@drawable/home_selector"/>
+    <item android:id="@+id/bottom_history_receipt"
+        android:title="@string/bottom_history_receipt"
+        android:icon="@drawable/receipt_selector"/>
+    <item android:id="@+id/bottom_profile"
         android:title="@string/bottom_me"
-        android:icon="@drawable/ic_info"/>
+        android:icon="@drawable/profile_selector"/>
 </menu>
