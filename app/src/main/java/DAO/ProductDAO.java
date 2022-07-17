@@ -15,10 +15,12 @@ import Model.Product;
 import Model.User;
 
 public class ProductDAO {
-    MyDatabase db;
+    private final MyDatabase db;
 
     public ProductDAO(Context context) {
-        this.db = new MyDatabase(context);
+        this.db = MyDatabase.getInstance(context);
+
+//        this.db = new MyDatabase(context);
     }
 
     public Product getProductById(int proid) {
@@ -35,6 +37,8 @@ public class ProductDAO {
             String image = cs.getString(6);
             pro = new Product(proid, name, price, quantity, soldQuantity, desc, image);
         }
+        cs.close();
+        read.close();
         return pro;
     }
 
@@ -55,6 +59,7 @@ public class ProductDAO {
             cs.moveToNext();
         }
         cs.close();
+        dao.close();
         return list;
     }
 
@@ -64,6 +69,7 @@ public class ProductDAO {
         cv.put("Quantity", quantity);
         SQLiteDatabase dao = db.getWritableDatabase();
         check = dao.update("PRODUCTS", cv, "ProductId = ?", new String[]{id + ""}) > 0;
+        dao.close();
         return check;
     }
 
@@ -77,6 +83,8 @@ public class ProductDAO {
             int quantityInStock = cs.getInt(3);
             check = quantity <= quantityInStock;
         }
+        cs.close();
+        read.close();
         return check;
     }
 
@@ -89,6 +97,7 @@ public class ProductDAO {
             cv.put("SoldQuantity", pro.getSoldQuantity() + buyQuantity);
             SQLiteDatabase dao = db.getWritableDatabase();
             check = dao.update("PRODUCTS", cv, "ProductId = ?", new String[]{String.valueOf(id)}) > 0;
+            dao.close();
         }
         return check;
     }
@@ -115,6 +124,7 @@ public class ProductDAO {
             }
         }
         cs.close();
+        db.close();
         return list;
 
 
@@ -124,9 +134,9 @@ public class ProductDAO {
         String result = "";
         for (int i = 0; i < cartDetailsList.size(); i++) {
             if (i == cartDetailsList.size() - 1) {
-                result += cartDetailsList.get(i).getCartId() + "";
+                result += cartDetailsList.get(i).getProductId() + "";
             } else {
-                result += cartDetailsList.get(i).getCartId() + ", ";
+                result += cartDetailsList.get(i).getProductId() + ", ";
             }
         }
         Log.d(String.valueOf(ProductDAO.this), "Convert to String in ProductDAO: " + result);

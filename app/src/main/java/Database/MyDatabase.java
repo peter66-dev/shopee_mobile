@@ -8,8 +8,19 @@ import androidx.annotation.Nullable;
 
 public class MyDatabase extends SQLiteOpenHelper {
 
+    private static MyDatabase mInstance = null;
+    private final Context context;
+
     public MyDatabase(@Nullable Context context) { // tạo db
         super(context, "shopeeDB7", null, 1);
+        this.context = context;
+    }
+
+    public static synchronized MyDatabase getInstance(Context ctx) {
+        if (mInstance == null) {
+            mInstance = new MyDatabase(ctx.getApplicationContext());
+        }
+        return mInstance;
     }
 
     @Override

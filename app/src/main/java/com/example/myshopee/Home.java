@@ -3,6 +3,7 @@ package com.example.myshopee;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -47,10 +48,14 @@ public class Home extends AppCompatActivity {
                 int id = item.getItemId();
                 if (id == R.id.bottom_home) {
                     viewPager2.setCurrentItem(0);
-                } else if (id == R.id.bottom_cart) {
+                    welcomeUser.setVisibility(View.VISIBLE);
+                } else if (id == R.id.bottom_history_receipt) {
                     viewPager2.setCurrentItem(1);
-                } else if (id == R.id.bottom_me) {
+                    welcomeUser.setVisibility(View.GONE);
+                } else if (id == R.id.bottom_profile) {
                     viewPager2.setCurrentItem(2);
+                    welcomeUser.setVisibility(View.VISIBLE);
+
                 }
                 return true;
             }
@@ -62,11 +67,11 @@ public class Home extends AppCompatActivity {
                 super.onPageSelected(position);
                 switch (position) {
                     case 1: {
-                        bottomNavigationView.getMenu().findItem(R.id.bottom_cart).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.bottom_history_receipt).setChecked(true);
                         break;
                     }
                     case 2: {
-                        bottomNavigationView.getMenu().findItem(R.id.bottom_me).setChecked(true);
+                        bottomNavigationView.getMenu().findItem(R.id.bottom_profile).setChecked(true);
                         break;
                     }
                     default: {

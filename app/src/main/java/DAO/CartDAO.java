@@ -12,10 +12,11 @@ import Database.MyDatabase;
 import Model.Cart;
 
 public class CartDAO {
-    MyDatabase mydata;
+    private final MyDatabase mydata;
 
     public CartDAO(Context context) {
-        this.mydata = new MyDatabase(context);
+//        this.mydata = new MyDatabase(context);
+        this.mydata = MyDatabase.getInstance(context);
     }
 
     public Cart getCartById(int id) {
@@ -30,6 +31,7 @@ public class CartDAO {
             cart = new Cart(cartId, userId, isPaid);
         }
         cs.close();
+        db.close();
         return cart;
     }
 
@@ -45,6 +47,7 @@ public class CartDAO {
             cs.moveToNext();
         }
         cs.close();
+        db.close();
         return list;
     }
 
@@ -62,6 +65,7 @@ public class CartDAO {
             }
         }
         cs.close();
+        db.close();
         return list;
     }
 
@@ -80,6 +84,7 @@ public class CartDAO {
             }
         }
         cs.close();
+        db.close();
         return list;
     }
 
@@ -89,6 +94,7 @@ public class CartDAO {
         contentValues.put("UserId", userId);
         contentValues.put("IsPaid", isPaid);
         long row = db.insert("CARTS", null, contentValues);
+        db.close();
         return (int) row;
     }
 
@@ -98,22 +104,44 @@ public class CartDAO {
             SQLiteDatabase db = mydata.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put("IsPaid", isPaid);
-            check = db.update("CARTS", contentValues, "cartId=?", new String[]{cartId + ""}) > 0;
+            check = db.update("CARTS", contentValues, "CartId=?", new String[]{cartId + ""}) > 0;
+            db.close();
         }
         return check;
     }
 
     public boolean deleteCart(int cartId) {
         SQLiteDatabase db = mydata.getWritableDatabase();
-        return db.delete("CARTS", "CartId = ?", new String[]{String.valueOf(cartId)}) > 0;
+        boolean success = db.delete("CARTS", "CartId = ?", new String[]{String.valueOf(cartId)}) > 0;
+        db.close();
+        return success;
     }
 
     public boolean changeStatusIsPaid(int cartId) { // khi user đủ điều kiện thanh toán thì set IsPaid = 1 (Đã thanh toán!)
         SQLiteDatabase db = mydata.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("IsPaid", 1);
-        return db.update("CARTS", contentValues, "cartId=?", new String[]{String.valueOf(cartId)}) > 0;
+        boolean update = db.update("CARTS", contentValues, "CartId=?", new String[]{String.valueOf(cartId)}) > 0;
+        db.close();
+        return update;
     }
 
+    public List<Cart> getPaidCartsByUserId(int userId) {
+        List<Cart> list = new ArrayList<>();
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        Cursor cs = db.rawQuery("select * from CARTS where userId =? and IsPaid=?", new String[]{userId + "", 1 + ""});
+        if (cs != null && cs.getCount() > 0) {
+            cs.moveToFirst();
+            while (!cs.isAfterLast()) {
+                int cartId = cs.getInt(0);
+                int isPaid = cs.getInt(2);
+                list.add(new Cart(cartId, userId, isPaid));
+                cs.moveToNext();
+            }
+        }
+        cs.close();
+        db.close();
+        return list;
+    }
 
 }

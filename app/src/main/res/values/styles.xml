@@ -7,8 +7,14 @@
         <item name="android:insetBottom">6dp</item>
     </style>
 
+    <style name="Circular" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="TitleActionBar" parent="@style/Base.TextAppearance.AppCompat.Title">
         <item name="android:textSize">19sp</item>
+        <item name="android:textStyle">normal</item>
+
     </style>
 
 </resources>
