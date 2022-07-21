@@ -54,7 +54,7 @@ public class Home extends AppCompatActivity {
                     welcomeUser.setVisibility(View.GONE);
                 } else if (id == R.id.bottom_profile) {
                     viewPager2.setCurrentItem(2);
-                    welcomeUser.setVisibility(View.VISIBLE);
+                    welcomeUser.setVisibility(View.GONE);
 
                 }
                 return true;

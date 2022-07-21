@@ -146,36 +146,6 @@ public class ProductDetail extends AppCompatActivity {
 
         }
 
-        Intent intent = new Intent(this, MainActivity.class);
-
-        btnCare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String CHANNEL_ID = "channel_id";
-                CharSequence name = "channel_name";
-
-                Context context = getApplicationContext();
-                int important = NotificationManager.IMPORTANCE_HIGH;
-                PendingIntent pe = PendingIntent.getActivity(getApplicationContext(), 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-                Notification builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Shopee message")
-                        .setContentText("Bạn đã quan tâm sản phẩm này!")
-                        .setChannelId(CHANNEL_ID)
-                        .setContentIntent(pe)
-                        .setAutoCancel(true)
-                        .build();
-
-                NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel mychannel = new NotificationChannel(CHANNEL_ID, name, important);
-                    manager.createNotificationChannel(mychannel);
-                }
-                manager.notify(0, builder);
-            }
-        });
-
         btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -230,6 +200,41 @@ public class ProductDetail extends AppCompatActivity {
 
                 showCartDialog();
             }
+        });
+
+        // Mua ngay
+        btnBuy.setOnClickListener(v -> {
+            if(getAllCartDetailsUnpaid.containsKey(currentProduct.getProductId())) {
+                Log.d(String.valueOf(ProductDetail.this), "getAllCartDetailsUnpaid contains ProductId: " + currentProduct.getProductId());
+                Log.d(String.valueOf(ProductDetail.this), "getAllCartDetailsUnpaid get value with ProductId: " + getAllCartDetailsUnpaid.get(currentProduct.getProductId()).toString());
+                CartDetails existsCartDetails = getAllCartDetailsUnpaid.get(currentProduct.getProductId());
+                existsCartDetails.setQuantity(existsCartDetails.getQuantity() + 1);
+                cartDetailDAO.updateCartDetail(existsCartDetails);
+                getAllCartDetailsUnpaid.put(currentProduct.getProductId(), existsCartDetails);
+            }
+            else {
+                // create new cart for user
+                int cartIdInserted = cartDAO.createCart(currentUser.getUserId(), 0);
+                if(cartIdInserted > 0) {
+                    boolean addCartDetails = cartDetailDAO.createCartDetail(cartIdInserted, currentProduct.getProductId(), 1);
+                    if(!addCartDetails) {
+                        Log.d(String.valueOf(ProductDetail.this), "Failed to add product to cart details after created new cart");
+                    } else {
+                        CartDetails cartInserted = cartDetailDAO.getCartDetailsById(cartIdInserted);
+                        getAllCartDetailsUnpaid.put(currentProduct.getProductId(), cartInserted);
+                    }
+                }
+                else {
+                    Log.d(String.valueOf(ProductDetail.this), "Failed to create new Cart");
+                }
+            }
+            int currentQuantityInCart = Integer.valueOf(quantityInCart.getText().toString().trim());
+            currentQuantityInCart += 1;
+            quantityInCart.setText(String.valueOf(currentQuantityInCart));
+            quantityInCart.setVisibility(View.VISIBLE);
+
+            Intent intent = new Intent(ProductDetail.this, CartActivity.class);
+            startActivity(intent);
         });
     }
 

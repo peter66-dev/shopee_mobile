@@ -33,7 +33,6 @@
         app:hintAnimationEnabled="false"
         app:counterMaxLength="40"
         app:boxStrokeWidth="2dp"
-        app:boxStrokeColor="@color/stroke_color_state"
         app:boxBackgroundColor="@color/white"
         app:errorEnabled="true"
         android:padding="20dp"

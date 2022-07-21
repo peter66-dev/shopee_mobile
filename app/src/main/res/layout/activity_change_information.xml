@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ChangeInformationActivity">
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/change_information_activity.toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/underline"
+        android:backgroundTint="@color/ubuntu_orange"
+        android:elevation="2dp"
+        app:navigationIcon="@drawable/ic_arrow_left_long_light"
+        app:navigationIconTint="@color/white"
+        app:title="Thông tin cá nhân"
+        app:titleTextColor="@color/white"
+        app:titleTextAppearance="@style/TitleActionBar" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_info"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_below="@+id/change_information_activity.toolbar"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="25dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:orientation="vertical"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:background="@drawable/underline"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:weightSum="1">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="Username"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputUsername"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.7"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="false"
+                    app:hintAnimationEnabled="false"
+                    app:counterMaxLength="40"
+                    app:boxStrokeWidth="2dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:errorEnabled="true"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:maxLength="20"
+                        android:inputType="text"
+                        android:textSize="16sp"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:background="@drawable/underline"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:weightSum="1"
+
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="Địa chỉ"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+
+                    />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="false"
+                    app:hintAnimationEnabled="false"
+                    app:counterMaxLength="40"
+                    app:boxStrokeWidth="2dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:errorEnabled="true"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:maxLength="40"
+                        android:inputType="text"
+                        android:textSize="16sp"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.3"
+                android:background="@drawable/underline"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:weightSum="1"
+
+                >
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:text="Số điện thoại"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+
+                    />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputPhone"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.7"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:endIconMode="clear_text"
+                    app:hintEnabled="false"
+                    app:hintAnimationEnabled="false"
+                    app:counterMaxLength="40"
+                    app:boxStrokeWidth="2dp"
+                    app:boxBackgroundColor="@color/white"
+                    app:errorEnabled="true"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:maxLength="40"
+                        android:inputType="number"
+                        android:textSize="16sp"
+
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/card_view_info"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginHorizontal="20dp"
+        android:gravity="center"
+        >
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            >
+            <Button
+                android:id="@+id/btnChangeInfoButton"
+                style="@style/Button.OrangeCorners"
+                android:layout_width="170dp"
+                android:layout_height="40dp"
+                android:text="thay đổi"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="right"
+            >
+            <Button
+                android:id="@+id/btnReset"
+                style="@style/Button.OrangeCorners"
+                android:layout_width="170dp"
+                android:layout_height="40dp"
+                android:text="Reset"
+                android:textColor="@color/white"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

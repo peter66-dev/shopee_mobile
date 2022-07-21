@@ -23,6 +23,28 @@ public class AccountDAO {
 
     }
 
+    public User moneyRecharge(User currentUser, Double money) {
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Budget", currentUser.getBudget() + money);
+        int row = db.update("ACCOUNTS", values, "UserId=?", new String[]{String.valueOf(currentUser.getUserId())});
+        db.close();
+        return getUserById(row);
+    }
+
+    public User updateInfo(User currentUser) {
+        SQLiteDatabase db = mydata.getReadableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("Username", currentUser.getUserName());
+        values.put("Address", currentUser.getAddress());
+        values.put("Phone", currentUser.getPhone());
+        int row = db.update("ACCOUNTS", values, "UserId=?", new String[]{String.valueOf(currentUser.getUserId())});
+        db.close();
+        return getUserById(row);
+    }
+
+
+
     public User getUserById(int userId) {
         User acc = null;
         SQLiteDatabase db = mydata.getReadableDatabase();

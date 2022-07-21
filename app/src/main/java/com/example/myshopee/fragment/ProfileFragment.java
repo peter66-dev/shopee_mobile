@@ -1,6 +1,7 @@
 package com.example.myshopee.fragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,23 +18,32 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myshopee.ChangeInformationActivity;
 import com.example.myshopee.MyUtils.CommonUtils;
 import com.example.myshopee.R;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class InfomationFragment extends Fragment {
+import DAO.AccountDAO;
+import Model.User;
+
+public class ProfileFragment extends Fragment {
 
     private View view;
+    private AccountDAO accountDAO;
+    private User currentUser;
     private TextView txvUsername;
     private TextView txvBalance;
     private Button btnUserInfo;
     private Button btnRecharge;
     private Button btnLogOut;
+    private boolean shouldRefreshOnResume = false;
+
 
     private void mapping(View view) {
         txvUsername = view.findViewById(R.id.txvUsername);
@@ -48,6 +58,10 @@ public class InfomationFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_me, container, false);
         mapping(view);
+        accountDAO = new AccountDAO(getActivity());
+        currentUser = CommonUtils.getCurrentUser(getActivity());
+        txvUsername.setText(currentUser.getUserName());
+        txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
         setListeners();
         return view;
     }
@@ -56,10 +70,13 @@ public class InfomationFragment extends Fragment {
         btnRecharge.setOnClickListener(v -> {
             openRechargeDialog(Gravity.CENTER);
         });
+        btnUserInfo.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ChangeInformationActivity.class);
+            startActivity(intent);
+        });
     }
 
     private void openRechargeDialog(int gravity) {
-        double money = 0;
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -81,39 +98,65 @@ public class InfomationFragment extends Fragment {
         } else {
             dialog.setCancelable(false);
         }
+        Button btnCancel = dialog.findViewById(R.id.dialog_recharge_btnCancel);
+        Button btnConfirm = dialog.findViewById(R.id.dialog_recharge_btnConfirm);
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+
 
         TextInputLayout textInputMoney = dialog.findViewById(R.id.dialog_recharge_textInputMoney);
 
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence charSequence, int i, int i1, Spanned spanned, int i2, int i3) {
-                String currentTextInput = textInputMoney.getEditText().getText().toString().trim();
-                Log.d(String.valueOf(InfomationFragment.this), "Current Text in filter: " + currentTextInput);
-                String charSequenceToString = charSequence.toString();
-                charSequenceToString = charSequenceToString.replace(",", "");
 
-                int length = charSequenceToString.length();
-                Log.d(String.valueOf(InfomationFragment.this), "Character is being filtered: " + charSequenceToString);
-                if(Character.compare(charSequenceToString.charAt(length - 1), 'đ') == 0) {
-                    charSequenceToString = charSequenceToString.substring(0, length - 1);
-                }
+                final CharSequence replacementText = charSequence.subSequence(i, i1);
+                int length = replacementText.length();
+                if(length != 0) {
+                    Log.d(String.valueOf(ProfileFragment.this), "replacementText in filter: " + replacementText);
+                    String charSequenceToString = replacementText.toString();
+                    if(Character.compare(charSequenceToString.charAt(length - 1), 'đ') == 0) {
+                        charSequenceToString = charSequenceToString.substring(0, length - 1);
+                        charSequenceToString = charSequenceToString.replace(",", "");
 
-                if(Double.parseDouble(charSequenceToString) > 10000000) {
-                    return charSequenceToString.substring(0, length - 3) + "đ";
+                        if(Double.parseDouble(charSequenceToString) > 10000000) {
+                            charSequenceToString = charSequenceToString.substring(0, charSequenceToString.length() - 1);
+                            charSequenceToString = CommonUtils.getReadableCostFromDouble(Double.parseDouble(charSequenceToString)) + "đ";
+
+                            // Show error because your maximum limit is 10 milion
+                            textInputMoney.setErrorEnabled(true);
+                            textInputMoney.setError("Hạn mức tối đa của bạn là 10.000.000");
+                            btnConfirm.setEnabled(false);
+                            return charSequenceToString;
+                        }
+                    }
                 }
+                if(textInputMoney.isErrorEnabled()) {
+                    textInputMoney.setErrorEnabled(false);
+                }
+                btnConfirm.setEnabled(true);
                 return null;
-//
-//                currentTextInput = currentTextInput.replace(",", "");
-//                currentTextInput = currentTextInput.substring(0, currentTextInput.length() - 1);
-////                charSequenceToString = "" + charSequenceToString.charAt(charSequence.length() - 2);
-//                String textAfterChanged = currentTextInput + "" + charSequenceToString;
-//                Double value = Double.parseDouble(textAfterChanged);
-//                if(value > 0) {
-//                    Log.d(String.valueOf(InfomationFragment.this), CommonUtils.getReadableCostFromDouble(value));
-//                }
-//                Log.d(String.valueOf(InfomationFragment.this), CommonUtils.getReadableCostFromDouble(value));
             }
         };
+
+        btnConfirm.setOnClickListener(v -> {
+            // Handle recharge for user
+            String getBudget = textInputMoney.getEditText().getText().toString();
+            getBudget = getBudget.substring(0, getBudget.length() - 1);
+            getBudget = getBudget.replace(",", "");
+            Double addBudge = Double.valueOf(getBudget);
+            User budgetChanged = accountDAO.moneyRecharge(currentUser, addBudge);
+            if(budgetChanged != null) {
+                currentUser = budgetChanged;
+                txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
+            }
+            else {
+                Toast.makeText(getActivity(), "Đã xảy ra lỗi!", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
+
+        });
 
         textInputMoney.getEditText().addTextChangedListener(new TextWatcher() {
             boolean ignoreChange = false;
@@ -124,20 +167,23 @@ public class InfomationFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Log.d(String.valueOf(InfomationFragment.this), "CharSequence on text changed: " + charSequence);
+                Log.d(String.valueOf(ProfileFragment.this), "CharSequence on text changed: " + charSequence);
 
                 if(!ignoreChange){
                     String getInput = charSequence.toString();
-                    Log.d(String.valueOf(InfomationFragment.this), "On text changed: " + getInput);
+                    Log.d(String.valueOf(ProfileFragment.this), "On text changed: " + getInput);
 
                     getInput = getInput.replace(",", "");
                     int length = getInput.length();
                     if(length > 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
                         getInput = getInput.substring(0, length - 1);
                         String formatted = CommonUtils.getReadableCostFromDouble(Double.parseDouble(getInput)) + "đ";
+                        Log.d(String.valueOf(ProfileFragment.this), "formatted: " + formatted);
+
                         ignoreChange = true;
                         textInputMoney.getEditText().setText(formatted);
-                        textInputMoney.getEditText().setSelection(formatted.length() - 1);
+                        length = textInputMoney.getEditText().getText().length();
+                        textInputMoney.getEditText().setSelection(length - 1);
                         ignoreChange = false;
                     }
                     else if(length == 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
@@ -157,20 +203,6 @@ public class InfomationFragment extends Fragment {
 
                 textInputMoney.getEditText().setFilters(new InputFilter[] {filter});
 
-//                if(length > 0 && Character.compare(getInput.charAt(length - 1),'đ') == 0) {
-//                    getInput = getInput.substring(0, length - 1);
-//                    String formatted = CommonUtils.getReadableCostFromDouble(Double.parseDouble(getInput));
-////                    formatted += "đ";
-//                    textInputMoney.getEditText().setText(formatted);
-//                    textInputMoney.getEditText().setSelection(formatted.length() - 1);
-//                }
-//                else if(length > 0 && Character.compare(getInput.charAt(length - 1), 'đ') != 0 ) {
-//                    String formatted = CommonUtils.getReadableCostFromDouble(Double.parseDouble(getInput));
-////                    formatted += "đ";
-//                    textInputMoney.getEditText().setText(formatted);
-//                    textInputMoney.getEditText().setSelection(formatted.length() - 1);
-//                }
-
             }
 
             @Override
@@ -178,16 +210,25 @@ public class InfomationFragment extends Fragment {
 
             }
         });
-        Button btnCancel = dialog.findViewById(R.id.dialog_recharge_btnCancel);
-        Button btnConfirm = dialog.findViewById(R.id.dialog_recharge_btnConfirm);
 
-        btnCancel.setOnClickListener(v -> dialog.dismiss());
-
-        btnConfirm.setOnClickListener(v -> {
-            // Handle recharge for user
-            dialog.dismiss();
-        });
 
         dialog.show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        shouldRefreshOnResume = true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(shouldRefreshOnResume) {
+            currentUser = CommonUtils.getCurrentUser(getActivity());
+            txvUsername.setText(currentUser.getUserName());
+            txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
+            shouldRefreshOnResume = false;
+        }
     }
 }
