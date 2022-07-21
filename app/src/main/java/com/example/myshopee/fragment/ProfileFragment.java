@@ -150,6 +150,8 @@ public class ProfileFragment extends Fragment {
             if(budgetChanged != null) {
                 currentUser = budgetChanged;
                 txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
+                Toast.makeText(getActivity(), "Nạp tiền thành công!", Toast.LENGTH_SHORT).show();
+
             }
             else {
                 Toast.makeText(getActivity(), "Đã xảy ra lỗi!", Toast.LENGTH_SHORT).show();
