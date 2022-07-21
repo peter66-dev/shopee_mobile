@@ -208,19 +208,7 @@ public class CartActivity extends AppCompatActivity implements IListenerActionsI
         if(isChecked) {
             changeViewWhenActions();
         }
-//        CartAdapter.CartViewHolder holder = (CartAdapter.CartViewHolder) cartRecyclerView.getChildViewHolder(cartRecyclerView.getChildAt(position));
-//        CheckBox checkBoxAtPosition = holder.itemView.findViewById(R.id.checkBoxItem);
-//        if(isChecked) {
-//            checkBoxAtPosition.setChecked(true);
-//            changeViewWhenActions();
-//            Log.d(String.valueOf(CartActivity.this), "The state of checkbox when increaseBtn: " + isChecked);
-//        }
-//        else {
-//            checkBoxAtPosition.setChecked(false);
-//            changeViewWhenActions();
-//            Log.d(String.valueOf(CartActivity.this), "The state of checkbox when increaseBtn: " + isChecked);
-//
-//        }
+
     }
 
     @Override
@@ -244,20 +232,6 @@ public class CartActivity extends AppCompatActivity implements IListenerActionsI
         if(isChecked) {
             changeViewWhenActions();
         }
-//        CartAdapter.CartViewHolder holder = (CartAdapter.CartViewHolder) cartRecyclerView.getChildViewHolder(cartRecyclerView.getChildAt(position));
-//        CheckBox checkBoxAtPosition = holder.itemView.findViewById(R.id.checkBoxItem);
-//        if(isChecked) {
-//            checkBoxAtPosition.setChecked(true);
-//            changeViewWhenActions();
-//            Log.d(String.valueOf(CartActivity.this), "The state of checkbox when increaseBtn: " + isChecked);
-//
-//        }
-//        else {
-//            checkBoxAtPosition.setChecked(false);
-//            changeViewWhenActions();
-//            Log.d(String.valueOf(CartActivity.this), "The state of checkbox when increaseBtn: " + isChecked);
-//
-//        }
 
     }
 

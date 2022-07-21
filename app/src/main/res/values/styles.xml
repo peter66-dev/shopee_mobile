@@ -17,4 +17,21 @@
 
     </style>
 
+    <style name="Button.Underline" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@drawable/underline</item>
+        <item name="android:insetTop">6dp</item>
+        <item name="android:insetBottom">6dp</item>
+    </style>
+
+    <style name="Button.OrangeCorners" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@null</item>
+        <item name="android:background">@color/ubuntu_orange</item>
+        <item name="android:insetTop">5dp</item>
+        <item name="android:insetBottom">3dp</item>
+        <item name="android:insetRight">15dp</item>
+        <item name="android:insetLeft">15dp</item>
+
+    </style>
+
 </resources>

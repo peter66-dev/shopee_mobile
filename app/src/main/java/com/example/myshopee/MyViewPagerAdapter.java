@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.myshopee.fragment.InfomationFragment;
+import com.example.myshopee.fragment.ProfileFragment;
 import com.example.myshopee.fragment.HomeFragment;
 import com.example.myshopee.fragment.OrderHistoryFragment;
 
@@ -24,7 +24,7 @@ public class MyViewPagerAdapter extends FragmentStateAdapter {
                 return new OrderHistoryFragment();
             }
             case 2: {
-                return new InfomationFragment();
+                return new ProfileFragment();
             }
             default: {
                 return new HomeFragment();

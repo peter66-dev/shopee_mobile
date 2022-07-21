@@ -134,13 +134,13 @@
                 android:src="@drawable/p11"
                 android:scaleType="fitCenter"
                 />
+
             <ImageView
                 android:id="@+id/productImg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/p11"
                 android:scaleType="fitCenter"
-                />
+                android:src="@drawable/p11" />
 
         </RelativeLayout>
 

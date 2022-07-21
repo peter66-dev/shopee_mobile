@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    android:background="@color/white">
+    <TextView
+        android:id="@+id/dialog_confirm_layout.confirm_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:textColor="@color/ubuntu_orange"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:gravity="left"
+        android:text="Nạp tiền"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#BDBDBD"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/dialog_recharge.textInputMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:hintAnimationEnabled="false"
+        app:counterMaxLength="40"
+        app:boxStrokeWidth="2dp"
+        app:boxBackgroundColor="@color/white"
+        app:errorEnabled="true"
+        android:padding="20dp"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:maxLength="40"
+            android:inputType="number"
+            android:textSize="17sp"
+            android:hint="0đ"
+
+            />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        >
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_recharge.btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.6"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/cancel_text"
+            android:textAllCaps="true"
+            android:backgroundTint="@android:color/transparent"
+            android:textStyle="bold"
+            android:gravity="right"
+            android:textSize="17sp"
+            />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/dialog_recharge.btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/confirm_text"
+            android:textAllCaps="true"
+            android:backgroundTint="@android:color/transparent"
+            android:textStyle="bold"
+            android:textColor="@color/ubuntu_orange"
+            android:textSize="17sp"
+            android:gravity="center"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>
