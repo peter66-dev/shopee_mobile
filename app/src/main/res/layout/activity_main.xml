@@ -25,6 +25,7 @@
         android:layout_marginEnd="30dp"
         android:layout_below="@id/imgLogo"
         android:hint="Email/Số điện thoại/Tài khoản"
+        android:textColorHint="@color/stroke_color_state"
         app:startIconDrawable="@drawable/username">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/username"
@@ -63,6 +64,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnLogin"
+        style="?attr/materialButtonOutlinedStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/rememberMe"
@@ -70,9 +72,16 @@
         android:layout_marginTop="-2dp"
         android:layout_marginEnd="30dp"
         android:text="Đăng nhập"
-        android:textColor="#ACB3AC"
-        android:textSize="10dp"
-        app:cornerRadius="0dp" />
+        android:textColor="#1C1C1C"
+        android:textSize="14dp"
+        android:textStyle="bold"
+        app:cornerRadius="0dp"
+        app:strokeWidth="2dp"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:insetLeft="0dp"
+        android:insetRight="0dp"
+        />
 
     <LinearLayout
         android:id="@+id/layoutRegister"
@@ -88,7 +97,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:text="Đăng ký"
-            android:textSize="12dp"
+            android:textSize="14dp"
             android:layout_weight="2"/>
 
         <TextView
@@ -99,7 +108,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="30dp"
             android:text="Quên mật khẩu"
-            android:textSize="12dp" />
+            android:textSize="14dp" />
     </LinearLayout>
 
     <TextView
@@ -110,32 +119,41 @@
         android:layout_marginTop="10dp"
         android:text="Hoặc"
         android:textAlignment="center"
-        android:textSize="12dp" />
+        android:textSize="14dp" />
 
     <LinearLayout
         android:id="@+id/loginByGoogle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/orOption"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:weightSum="1"
+        android:layout_margin="30dp"
+        >
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
-            android:layout_marginStart="30dp"
+            android:layout_weight="0.2"
             android:src="@drawable/google"
             android:layout_gravity="center_vertical"
             />
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="41dp"
-            android:layout_marginEnd="30dp"
-            android:background="#2c88cc"
+            android:layout_weight="0.8"
+            style="?attr/materialButtonOutlinedStyle"
             android:text="TIẾP TỤC VỚI GOOGLE"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="10dp"
-            app:cornerRadius="0dp" />
+            app:cornerRadius="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetLeft="0dp"
+            android:insetBottom="0dp"
+            app:strokeWidth="2dp"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -143,23 +161,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/loginByGoogle"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="30dp"
+        android:weightSum="1"
+        >
 
         <ImageView
-            android:layout_width="30dp"
+            android:layout_width="0dp"
             android:layout_height="30dp"
+            android:layout_weight="0.2"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="30dp"
             android:src="@drawable/facebook" />
 
         <com.google.android.material.button.MaterialButton
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="41dp"
-            android:layout_marginEnd="30dp"
-            android:background="#2c88cc"
+            android:layout_weight="0.8"
+            style="?attr/materialButtonOutlinedStyle"
             android:text="TIẾP TỤC VỚI FACECBOOK"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="10dp"
-            app:cornerRadius="0dp" />
+            app:cornerRadius="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
+            android:insetLeft="0dp"
+            android:insetBottom="0dp"
+            app:strokeWidth="2dp"
+            />
     </LinearLayout>
 </RelativeLayout>

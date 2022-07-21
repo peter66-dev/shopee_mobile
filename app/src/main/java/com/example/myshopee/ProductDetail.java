@@ -119,23 +119,6 @@ public class ProductDetail extends AppCompatActivity {
 
         currentUser = CommonUtils.getCurrentUser(ProductDetail.this);
         refreshInResumeState();
-//        unpaidCartsExisting = cartDAO.getUnpaidCartsByUserId(currentUser.getUserId());
-//        getAllCartDetailsUnpaid = cartDetailDAO.getCartDetailsUnpaidByListCartsUnPaid_HashMap(unpaidCartsExisting);
-//
-//        totalNumberOfQuantityInCart = cartDetailDAO.totalNumberOfProductsInUnpaidCarts(getAllCartDetailsUnpaid);
-//        // Log for debug
-//        Log.d(String.valueOf(ProductDetail.this), "The number of unpaid carts that exist: " + String.valueOf(unpaidCartsExisting.size()));
-//        Log.d(String.valueOf(ProductDetail.this), "The total quantity in the cart: " + String.valueOf(totalNumberOfQuantityInCart));
-//
-//
-//        // Init for cart
-//        if(totalNumberOfQuantityInCart > 0) {
-//            quantityInCart.setText(String.valueOf(totalNumberOfQuantityInCart));
-//        }
-//        else {
-//            quantityInCart.setText("0");
-//            quantityInCart.setVisibility(View.INVISIBLE);
-//        }
 
         btnBack.setOnClickListener(v -> onBackPressed());
 
@@ -414,6 +397,7 @@ public class ProductDetail extends AppCompatActivity {
         if(shouldRefreshOnResume) {
             Log.d(String.valueOf(ProductDetail.this), "Start Refresh on Resume");
             refreshInResumeState();
+            shouldRefreshOnResume = false;
         }
 //        Toast.makeText(this, "OnResume", Toast.LENGTH_SHORT).show();
     }

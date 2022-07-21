@@ -164,8 +164,8 @@ public class HomeFragment extends Fragment {
         if(shouldRefreshOnResume) {
             Log.d(String.valueOf(getActivity()), "Start Refresh on Resume in HomeFragment");
             refreshInResumeState();
-            Toast.makeText(getActivity(), "On Resume in HomeFragment", Toast.LENGTH_SHORT).show();
-
+//            Toast.makeText(getActivity(), "On Resume in HomeFragment", Toast.LENGTH_SHORT).show();
+            shouldRefreshOnResume = false;
         }
     }
 }
