@@ -25,7 +25,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myshopee.ChangeInformationActivity;
+import com.example.myshopee.MainActivity;
 import com.example.myshopee.MyUtils.CommonUtils;
+import com.example.myshopee.MyUtils.PreferenceManager;
 import com.example.myshopee.R;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -66,12 +68,25 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+
+
     private void setListeners() {
         btnRecharge.setOnClickListener(v -> {
             openRechargeDialog(Gravity.CENTER);
         });
         btnUserInfo.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), ChangeInformationActivity.class);
+            startActivity(intent);
+        });
+
+        btnLogOut.setOnClickListener(v -> {
+            // Call Preference Manager to clear user's informations from SharedPreference
+//            PreferenceManager preferenceManager = new PreferenceManager(getActivity());
+//            preferenceManager.clear();
+            // Create new intent in order to navigate user to Login view
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            // Set Flag to clear all previous activities/fragments, will only start with login view
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         });
     }
@@ -83,7 +98,7 @@ public class ProfileFragment extends Fragment {
         dialog.setContentView(R.layout.dialog_recharge);
 
         Window window = dialog.getWindow();
-        if(window == null) {
+        if (window == null) {
             return;
         }
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -93,7 +108,7 @@ public class ProfileFragment extends Fragment {
         windowAttributes.gravity = gravity;
         window.setAttributes(windowAttributes);
 
-        if(Gravity.BOTTOM == gravity) {
+        if (Gravity.BOTTOM == gravity) {
             dialog.setCancelable(true);
         } else {
             dialog.setCancelable(false);
@@ -113,14 +128,14 @@ public class ProfileFragment extends Fragment {
 
                 final CharSequence replacementText = charSequence.subSequence(i, i1);
                 int length = replacementText.length();
-                if(length != 0) {
+                if (length != 0) {
                     Log.d(String.valueOf(ProfileFragment.this), "replacementText in filter: " + replacementText);
                     String charSequenceToString = replacementText.toString();
-                    if(Character.compare(charSequenceToString.charAt(length - 1), 'đ') == 0) {
+                    if (Character.compare(charSequenceToString.charAt(length - 1), 'đ') == 0) {
                         charSequenceToString = charSequenceToString.substring(0, length - 1);
                         charSequenceToString = charSequenceToString.replace(",", "");
 
-                        if(Double.parseDouble(charSequenceToString) > 10000000) {
+                        if (Double.parseDouble(charSequenceToString) > 10000000) {
                             charSequenceToString = charSequenceToString.substring(0, charSequenceToString.length() - 1);
                             charSequenceToString = CommonUtils.getReadableCostFromDouble(Double.parseDouble(charSequenceToString)) + "đ";
 
@@ -132,7 +147,7 @@ public class ProfileFragment extends Fragment {
                         }
                     }
                 }
-                if(textInputMoney.isErrorEnabled()) {
+                if (textInputMoney.isErrorEnabled()) {
                     textInputMoney.setErrorEnabled(false);
                 }
                 btnConfirm.setEnabled(true);
@@ -147,13 +162,12 @@ public class ProfileFragment extends Fragment {
             getBudget = getBudget.replace(",", "");
             Double addBudge = Double.valueOf(getBudget);
             User budgetChanged = accountDAO.moneyRecharge(currentUser, addBudge);
-            if(budgetChanged != null) {
+            if (budgetChanged != null) {
                 currentUser = budgetChanged;
                 txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
                 Toast.makeText(getActivity(), "Nạp tiền thành công!", Toast.LENGTH_SHORT).show();
 
-            }
-            else {
+            } else {
                 Toast.makeText(getActivity(), "Đã xảy ra lỗi!", Toast.LENGTH_SHORT).show();
             }
             dialog.dismiss();
@@ -162,6 +176,7 @@ public class ProfileFragment extends Fragment {
 
         textInputMoney.getEditText().addTextChangedListener(new TextWatcher() {
             boolean ignoreChange = false;
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -171,13 +186,13 @@ public class ProfileFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 Log.d(String.valueOf(ProfileFragment.this), "CharSequence on text changed: " + charSequence);
 
-                if(!ignoreChange){
+                if (!ignoreChange) {
                     String getInput = charSequence.toString();
                     Log.d(String.valueOf(ProfileFragment.this), "On text changed: " + getInput);
 
                     getInput = getInput.replace(",", "");
                     int length = getInput.length();
-                    if(length > 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
+                    if (length > 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
                         getInput = getInput.substring(0, length - 1);
                         String formatted = CommonUtils.getReadableCostFromDouble(Double.parseDouble(getInput)) + "đ";
                         Log.d(String.valueOf(ProfileFragment.this), "formatted: " + formatted);
@@ -187,13 +202,11 @@ public class ProfileFragment extends Fragment {
                         length = textInputMoney.getEditText().getText().length();
                         textInputMoney.getEditText().setSelection(length - 1);
                         ignoreChange = false;
-                    }
-                    else if(length == 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
+                    } else if (length == 1 && Character.compare(getInput.charAt(length - 1), 'đ') == 0) {
                         ignoreChange = true;
                         textInputMoney.getEditText().setText("");
                         ignoreChange = false;
-                    }
-                    else {
+                    } else {
                         ignoreChange = true;
                         textInputMoney.getEditText().setText(CommonUtils.getReadableCostFromDouble(Double.parseDouble(getInput)) + "đ");
                         textInputMoney.getEditText().setSelection(textInputMoney.getEditText().length() - 1);
@@ -203,7 +216,7 @@ public class ProfileFragment extends Fragment {
 
                 }
 
-                textInputMoney.getEditText().setFilters(new InputFilter[] {filter});
+                textInputMoney.getEditText().setFilters(new InputFilter[]{filter});
 
             }
 
@@ -226,7 +239,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(shouldRefreshOnResume) {
+        if (shouldRefreshOnResume) {
             currentUser = CommonUtils.getCurrentUser(getActivity());
             txvUsername.setText(currentUser.getUserName());
             txvBalance.setText(CommonUtils.getReadableCostFromDouble(currentUser.getBudget()));
